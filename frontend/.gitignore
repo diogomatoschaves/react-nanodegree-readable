@@ -19,3 +19,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Semantic custom files and dist.
+!public/semantic/src/theme.config
+!public/semantic/src/themes/readable/
+!src/semantic.min.css
+!public/semantic/dist/themes/readable/

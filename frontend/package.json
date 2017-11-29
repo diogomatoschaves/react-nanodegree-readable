@@ -3,14 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "bootstrap": "^4.0.0-beta.2",
+    "material-ui": "^1.0.0-beta.21",
+    "material-ui-icons": "^1.0.0-beta.17",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
-    "react-scripts": "1.0.17"
+    "react-scripts": "1.0.17",
+    "reactstrap": "^5.0.0-alpha.4",
+    "semantic-ui": "^2.2.13",
+    "semantic-ui-css": "^2.2.12",
+    "typeface-roboto": "0.0.45"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "semantic-ui-react": "^0.77.0"
   }
 }
