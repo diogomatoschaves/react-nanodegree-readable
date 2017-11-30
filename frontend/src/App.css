@@ -1,3 +1,30 @@
+.title {
+  background-color: #2185d0 !important;
+  /*color: #0000ff !important;*/
+}
+
+.dropdown-category {
+  text-align: center !important;
+}
+
+.categories {
+  font-weight: bold !important;
+}
+
+.remove-button-div {
+  position: relative !important;
+  margin-right: -100px !important;
+  margin-top: -80px !important;
+}
+
+.remove-button {
+  padding: 10px !important;
+}
+
+.remove-button-comment-div {
+  position: relative !important;
+}
+
 .App {
   text-align: center;
 }

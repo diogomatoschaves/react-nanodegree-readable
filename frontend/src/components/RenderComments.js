@@ -2,33 +2,58 @@
  * Created by diogomatoschaves on 29/11/2017.
  */
 
-import React, { Component } from 'react'
-import { Comment, Segment } from 'semantic-ui-react'
+import React from 'react'
+import { Grid, Comment, Divider, Icon, Segment, Popup, Button } from 'semantic-ui-react'
 
 
 const RenderComments = (props) => {
 
-    const { comments } = props;
+    const { comments, getFormattedDate, deletePost } = props;
 
     return (
-      <Comment.Group>
 
+        <div>
         {comments instanceof Array && (
           comments.map((comment) => (
-              <Comment style={{'paddingLeft': '20px'}}>
-                <Comment.Content >
-                  <Comment.Author as='a'>{comment.author}</Comment.Author>
-                  <Comment.Metadata>
-                    <div>Today at 5:42PM</div>
-                  </Comment.Metadata>
-                  <Comment.Text>How artistic!</Comment.Text>
-                  <Comment.Actions>
-                    <Comment.Action>Reply</Comment.Action>
-                  </Comment.Actions>
-                </Comment.Content>
-              </Comment>
+            <div key={comment.id}>
+              <Grid columns={2}>
+                <Grid.Column width={13}>
+                  <Comment.Group >
+                  <Comment>
+                    <Comment.Content >
+                      <Comment.Author as='a'>{comment.author}</Comment.Author>
+                      <Comment.Metadata>
+                        <div>{getFormattedDate(comment.timestamp)}</div>
+                      </Comment.Metadata>
+                      <Comment.Text>{comment.body}</Comment.Text>
+                      <Comment.Actions>
+                        <div style={{'display': 'inline', 'paddingRight': '8px'}}>{comment.voteScore} Votes </div>
+                        <Comment.Action><Icon name="like outline"/></Comment.Action>
+                        <Comment.Action><Icon name="dislike outline"/></Comment.Action>
+                        <Comment.Action>Reply</Comment.Action>
+                      </Comment.Actions>
+                    </Comment.Content>
+                  </Comment>
+                  </Comment.Group>
+                </Grid.Column>
+                <Grid.Column width={3} verticalAlign="middle" textAlign="right">
+                  <div className="remove-button-comment-div">
+                  <Popup
+                    trigger={<Button className="remove-button" icon='remove' onClick={deletePost} size="tiny"/>}
+                    content='Delete Comment'
+                    position='bottom center'
+                    inverted
+                    size="mini"
+                    />
+                    </div>
+                </Grid.Column>
+              </Grid>
+              <Divider section/>
+            </div>
         )))}
-      </Comment.Group>
+
+        </div>
+
     )
 };
 
@@ -36,3 +61,5 @@ export default RenderComments
 
 // style={{'display':'flex', 'alignItems':'left'}}
 // <Comment.Avatar src='/assets/images/avatar/small/matt.jpg'/>
+//             <Segment key={comment.id}>
+
