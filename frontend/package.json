@@ -13,6 +13,8 @@
     "react-scripts": "1.0.17",
     "reactstrap": "^5.0.0-alpha.4",
     "redux": "^3.7.2",
+    "redux-async-initial-state": "^0.2.1",
+    "redux-thunk": "^2.2.0",
     "semantic-ui": "^2.2.13",
     "semantic-ui-css": "^2.2.12",
     "typeface-roboto": "0.0.45"

@@ -150,16 +150,3 @@ class ListPosts extends Component {
 }
 
 export default ListPosts
-
-// style={{'display': 'flex','justifyContent': 'center', 'alignItems': 'center'}}
-// <Segment>
-//
-//        </Segment>
-// <Grid>
-//          <Grid.Column width={4}>
-//            <Header as='h4'>Category</Header>
-//          </Grid.Column>
-//          <Grid.Column width={10}>
-//            <Header as='h4'>Post</Header>
-//          </Grid.Column>
-//        </Grid>
