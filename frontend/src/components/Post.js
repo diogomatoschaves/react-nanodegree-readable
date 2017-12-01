@@ -111,7 +111,7 @@ class Post extends Component {
               <Grid.Column width={3} verticalAlign="middle" textAlign="center" stretched>
                 <div className="remove-button-div">
                   <Popup
-                    trigger={<Button className="remove-button" icon='remove' onClick={deletePost} size="tiny"/>}
+                    trigger={<Button className="remove-button" color="red" icon='remove' onClick={deletePost} size="tiny"/>}
                     content='Delete Post'
                     position='bottom center'
                     inverted
@@ -127,7 +127,7 @@ class Post extends Component {
             <Divider section/>
           )}
           {commentsVisible && (
-          <Grid.Row className="colored-row">
+          <Grid.Row className="colored-row" style={{'paddingBottom': '0'}}>
             <Grid.Column width={3}>
             </Grid.Column>
             <Grid.Column width={13} textAlign='left' style={{'paddingLeft': '20px'}}>

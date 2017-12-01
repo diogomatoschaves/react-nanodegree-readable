@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Grid, Segment, Header, Label, Sticky } from 'semantic-ui-react'
+import { Switch, Route } from 'react-router-dom'
+import { connect } from 'react-redux'
 import ListPosts from './ListPosts.js'
 import SideMenu from './SideMenu.js'
+import NoMatch from './NoMatch.js'
 import { capitalize } from '../helpers/helpers'
 import 'typeface-roboto'
 import './../App.css';
@@ -87,48 +90,47 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Grid divided={true} stackable>
-
-          <Grid.Row>
-            <Grid.Column width={16} verticalAlign={'middle'}>
-              <Segment className="title">
-                <Label basic color="blue" size="large">
-                  <Header style={{'paddingLeft': '10px', 'paddingRight': '10px'}} color="blue" as="h2">Readable</Header>
-                </Label>
-              </Segment>
-            </Grid.Column>
-          </Grid.Row>
-
-          <Grid.Row columns={3}>
-            <Grid.Column width={4}>
-              <Sticky context={contextRef}>
-                <SideMenu
-                  handleChangeSort={this.handleChangeSort}
-                  handleChangeCategory={this.handleChangeCategory}
-                  valueSort={valueSort}
-                  valueCategory={valueCategory}
-                  categoryOptions={categoryOptions}
-                />
-              </Sticky>
-            </Grid.Column>
-
-            <Grid.Column  width={10}>
-              <div ref={this.handleContextRef}>
-              <ListPosts
-                posts={this.state.filteredPosts}
-                comments={this.state.comments}
-                valueSort={valueSort}
-                valueCategory={valueCategory}
-              />
-              </div>
-            </Grid.Column>
-
-            <Grid.Column width={2}>
-            </Grid.Column>
-
-
-          </Grid.Row>
-        </Grid>
+        <Switch>
+          <Route exact path="/" render={() => (
+            <Grid divided={true} stackable>
+              <Grid.Row>
+                <Grid.Column width={16} verticalAlign={'middle'}>
+                  <Segment className="title">
+                    <Label basic color="blue" size="large">
+                      <Header style={{'paddingLeft': '10px', 'paddingRight': '10px'}} color="blue" as="h2">Readable</Header>
+                    </Label>
+                  </Segment>
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row columns={3}>
+                <Grid.Column width={4}>
+                  <Sticky context={contextRef}>
+                    <SideMenu
+                      handleChangeSort={this.handleChangeSort}
+                      handleChangeCategory={this.handleChangeCategory}
+                      valueSort={valueSort}
+                      valueCategory={valueCategory}
+                      categoryOptions={categoryOptions}
+                    />
+                  </Sticky>
+                </Grid.Column>
+                <Grid.Column  width={10}>
+                  <div ref={this.handleContextRef}>
+                  <ListPosts
+                    posts={this.state.filteredPosts}
+                    comments={this.state.comments}
+                    valueSort={valueSort}
+                    valueCategory={valueCategory}
+                  />
+                  </div>
+                </Grid.Column>
+                <Grid.Column width={2}>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          )}/>
+          <Route component={NoMatch} />
+        </Switch>
       </div>
     );
   }

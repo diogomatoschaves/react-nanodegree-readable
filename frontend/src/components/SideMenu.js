@@ -5,21 +5,15 @@
 import React, { Component } from 'react'
 import { Menu, Dropdown, Segment } from 'semantic-ui-react'
 
-export default class SideMenu extends Component {
-
-  state = {
-    
-  };
+const SideMenu = props => {
   
-  render() {
-    const { options } = this.state;
     const { 
       handleChangeSort, 
       valueSort, 
       handleChangeCategory,
       valueCategory,
       categoryOptions,
-    } = this.props;
+    } = props;
 
     const optionsSort = [
       { key: 1, text: 'Vote Score', value: 1 },
@@ -54,8 +48,9 @@ export default class SideMenu extends Component {
           </Segment>
       </div>
     )
-  }
-}
+};
+
+export default SideMenu
 
 // <Dropdown
 //           pointing='left' className='link item'

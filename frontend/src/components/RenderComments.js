@@ -17,9 +17,9 @@ const RenderComments = (props) => {
           comments.map((comment) => (
             <div key={comment.id}>
               <Grid columns={2}>
-                <Grid.Column width={13}>
-                  <Comment.Group >
-                  <Comment>
+                <Grid.Column width={13} style={{'paddingTop': '1px', 'paddingBottom': '1px'}}>
+                  <Comment.Group style={{'paddingTop': '1px', 'paddingBottom': '1px'}}>
+                  <Comment >
                     <Comment.Content >
                       <Comment.Author as='a'>{comment.author}</Comment.Author>
                       <Comment.Metadata>
@@ -39,7 +39,7 @@ const RenderComments = (props) => {
                 <Grid.Column width={3} verticalAlign="middle" textAlign="right">
                   <div className="remove-button-comment-div">
                   <Popup
-                    trigger={<Button className="remove-button" icon='remove' onClick={deletePost} size="tiny"/>}
+                    trigger={<Button className="remove-button" color='red' icon='remove' onClick={deletePost} size="tiny"/>}
                     content='Delete Comment'
                     position='bottom center'
                     inverted
@@ -48,7 +48,7 @@ const RenderComments = (props) => {
                     </div>
                 </Grid.Column>
               </Grid>
-              <Divider section/>
+              <Divider section style={{'paddingBottom': '1px'}}/>
             </div>
         )))}
 
