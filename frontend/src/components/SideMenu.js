@@ -2,15 +2,19 @@
  * Created by diogomatoschaves on 29/11/2017.
  */
 
-import React, { Component } from 'react'
-import { Menu, Dropdown, Segment } from 'semantic-ui-react'
+import React, { Component } from 'react';
+import { Menu, Dropdown, Segment } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { updateCategory } from '../actions/actions.js'
+import { capitalize } from '../helpers/helpers'
+
 
 const SideMenu = props => {
   
     const { 
       handleChangeSort, 
       valueSort, 
-      handleChangeCategory,
+      updateCategory,
       valueCategory,
       categoryOptions,
     } = props;
@@ -27,7 +31,7 @@ const SideMenu = props => {
 
           <Dropdown scrolling
             pointing='left' className='link item dropdown-category'
-            onChange={handleChangeCategory}
+            onChange={(e, { value }) => updateCategory(e, { value })}
             options={categoryOptions}
             selection
             value={valueCategory}
@@ -50,20 +54,26 @@ const SideMenu = props => {
     )
 };
 
-export default SideMenu
+function mapStateToProps ({ valueCategory, posts }) {
+  return {
+    valueCategory: valueCategory,
+    categoryOptions: posts.reduce((optionsObj, post) => {
+      if (!(optionsObj.optionsArr.includes(post.category))) {
+        const key = optionsObj.options.length + 1;
+        optionsObj.options.push({key: key, text: capitalize(post.category), value: key});
+        optionsObj.optionsArr.push(post.category);
+        return optionsObj
+      } else {
+        return optionsObj;
+      }
+    }, {options: [{ key: 1, text: 'All Posts', value: 1 }], optionsArr: []}).options
+  }
+}
 
-// <Dropdown
-//           pointing='left' className='link item'
-//           onChange={this.handleChangeSort}
-//             options={optionsSort}
-//             selection
-//             value={valueSort}
-//         />
+function mapDispatchToProps (dispatch) {
+  return {
+    updateCategory: (e, { value }) => dispatch(updateCategory(e, { value }))
+  }
+}
 
-// <Dropdown fluid floating labeled button className='icon'
-//           onChange={(e) => handleChangeSort(e)} text='Sort Posts' icon='filter' >
-//
-//               {optionsSort.map(option => (
-//                 <Dropdown.Item key={option.key} value={option.value}> {option.text} </Dropdown.Item>
-//               ))}
-//         </Dropdown>
+export default connect(mapStateToProps, mapDispatchToProps)(SideMenu)

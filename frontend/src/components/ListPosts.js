@@ -22,35 +22,7 @@ class ListPosts extends Component {
     category: ''
   };
 
-  getFormattedDate = (timeStamp) => {
-
-    let difference = Date.now() - timeStamp;
-    var daysDifference = Math.floor(difference/1000/60/60/24);
-    difference -= daysDifference*1000*60*60*24;
-
-    var hoursDifference = Math.floor(difference/1000/60/60);
-    difference -= hoursDifference*1000*60*60;
-
-    var minutesDifference = Math.floor(difference/1000/60);
-    difference -= minutesDifference*1000*60;
-
-    var secondsDifference = Math.floor(difference/1000);
-
-    let res;
-
-    if (daysDifference >= 1) {
-      (daysDifference === 1) ? res = `${daysDifference} day ago` : res = `${daysDifference} days ago`;
-    } else if (hoursDifference >= 1) {
-      (hoursDifference === 1) ? res = `${hoursDifference} hour ago` : res = `${hoursDifference} hours ago`;
-    } else if (minutesDifference >= 1) {
-      (minutesDifference === 1) ? res = `${minutesDifference} minute ago` : res = `${minutesDifference} minutes ago`;
-    } else {
-      (secondsDifference === 1) ? res = `${secondsDifference} second ago` : res = `${secondsDifference} seconds ago`;
-    }
-
-    return res
-
-  };
+  
 
   addPost = () => {
 
@@ -140,7 +112,6 @@ class ListPosts extends Component {
           key={post.id}
           post={post}
           getFormattedDate={this.getFormattedDate}
-          comments={comments[post.id]}
         />
       )))}
     </div>

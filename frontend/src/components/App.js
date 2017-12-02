@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Grid, Segment, Header, Label, Sticky } from 'semantic-ui-react'
 import { Switch, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { getItems } from '../actions/actions.js'
 import ListPosts from './ListPosts.js'
 import SideMenu from './SideMenu.js'
 import NoMatch from './NoMatch.js'
@@ -12,58 +13,16 @@ import './../App.css';
 class App extends Component {
   
   state = {
-    posts: [],
-    filteredPosts: [],
-    comments: {},
-    contextRef: true,
-    valueSort: 1,
-    valueCategory: 1,
-    categoryOptions: [
-      { key: 1, text: 'All Posts', value: 1 },
-      { key: 2, text: 'Redux', value: 2 },
-      { key: 3, text: 'React', value: 3 }
-    ]
+    contextRef: true
   };
   
   componentDidMount() {
-
-    const category = 'react';
-
-    const { valueCategory, categoryOptions } = this.state;
-
+    const { fetchPosts } = this.props;
+    
     let url = `http://localhost:3001/posts`;
-    let headers = {headers: { 'Authorization': 'Diogo\'s readable project' }};
+    
+    fetchPosts(url, {type: 'posts'});
 
-    fetch(url, headers)
-    .then((res) => res.json()).then((posts) => {
-
-      // let comments = {};
-      posts.map((post) => {
-      let url = `http://localhost:3001/posts/${post.id}/comments`;
-      fetch(url, headers)
-        .then((response) => response.json())
-        .then((response) => {
-          // comments[post.id] = response;
-          this.setState((prevState) => {
-            return {
-              ...prevState,
-              ['comments']: {
-                ...prevState['comments'],
-                [post.id]: response
-              }
-            }
-          })
-        })
-      });
-
-      let filteredPosts;
-
-      valueCategory !== 1 ? filteredPosts = posts.filter((post) => (
-      capitalize(post.category) === categoryOptions[valueCategory-1].text))
-      : filteredPosts = posts;
-
-      this.setState({ posts, filteredPosts: filteredPosts });
-    });
   }
 
   handleContextRef = contextRef => this.setState({ contextRef });
@@ -86,7 +45,8 @@ class App extends Component {
   
   render() {
 
-    const { contextRef, valueSort, valueCategory, categoryOptions } = this.state;
+    const { contextRef, categoryOptions } = this.state;
+    const { posts } = this.props;
 
     return (
       <div className="App">
@@ -108,19 +68,13 @@ class App extends Component {
                     <SideMenu
                       handleChangeSort={this.handleChangeSort}
                       handleChangeCategory={this.handleChangeCategory}
-                      valueSort={valueSort}
-                      valueCategory={valueCategory}
-                      categoryOptions={categoryOptions}
                     />
                   </Sticky>
                 </Grid.Column>
                 <Grid.Column  width={10}>
                   <div ref={this.handleContextRef}>
                   <ListPosts
-                    posts={this.state.filteredPosts}
-                    comments={this.state.comments}
-                    valueSort={valueSort}
-                    valueCategory={valueCategory}
+                    posts={posts}
                   />
                   </div>
                 </Grid.Column>
@@ -136,4 +90,54 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = ({ posts }) => {
+  return {
+    posts: posts
+  }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+      fetchPosts: (url, info) => dispatch(getItems(url, info))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
+
+// const category = 'react';
+//
+//     const { valueCategory, categoryOptions } = this.state;
+//
+//     let url = `http://localhost:3001/posts`;
+//     let headers = {headers: { 'Authorization': 'Diogo\'s readable project' }};
+//
+//     fetch(url, headers)
+//     .then((res) => res.json()).then((posts) => {
+//
+//       let comments = {};
+      // posts.map((post) => {
+      // let url = `http://localhost:3001/posts/${post.id}/comments`;
+      // fetch(url, headers)
+      //   .then((response) => response.json())
+      //   .then((response) => {
+      //     console.log(response);
+      //     this.setState((prevState) => {
+      //       return {
+      //         ...prevState,
+      //         ['comments']: {
+      //           ...prevState['comments'],
+      //           [post.id]: response
+      //         }
+      //       }
+      //     })
+      //   })
+      // });
+      //
+      // let filteredPosts;
+      //
+      // valueCategory !== 1 ? filteredPosts = posts.filter((post) => (
+      // capitalize(post.category) === categoryOptions[valueCategory-1].text))
+      // : filteredPosts = posts;
+      //
+      // this.setState({ posts, filteredPosts: filteredPosts });
+    // });

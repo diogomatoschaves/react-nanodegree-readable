@@ -8,17 +8,16 @@ import reducers from './reducers/index.js'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware, compose, combineReducers  } from 'redux'
-import * as asyncInitialState from 'redux-async-initial-state';
-
-const reducer = asyncInitialState.outerReducer(combineReducers({
-  ...reducers
-  
-}));
+import thunk from 'redux-thunk';
+import { logger } from 'redux-logger'
 
 
-store = createStore(
-  reducer,
-  compose(applyMiddleware(asyncInitialState.middleware(loadStore)))
+const reduxEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(
+  reducers,
+  {valueCategory: 1, valueSort: 1, posts: [], comments: []},
+  reduxEnhancers(applyMiddleware(thunk), applyMiddleware(logger))
 );
 
 
