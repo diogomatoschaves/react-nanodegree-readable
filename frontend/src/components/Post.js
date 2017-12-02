@@ -3,7 +3,7 @@
  */
 
 import React, { Component } from 'react';
-import { Grid, Feed, Icon, Header,
+import { Grid, Feed, Icon, Header, Image,
   Segment, Divider, Label, Button, Popup} from 'semantic-ui-react'
 import { getItems, addComment, editComment } from '../actions/actions.js'
 import { connect } from 'react-redux'
@@ -14,10 +14,7 @@ import CommentModal from './CommentModal.js'
 class Post extends Component {
 
   state = {
-    commentsVisible: false,
-    commentModalOpen: false,
-    username: '',
-    body: ''
+    commentsVisible: false
   };
   
   getFormattedDate = (timeStamp) => {
@@ -68,38 +65,10 @@ class Post extends Component {
     this.setState(() => ({commentsVisible: false}))
   };
 
-  openCommentModal = (username, body) => {
-    this.setState(() => ({commentModalOpen: true, username, body}))
-  };
-
-  closeCommentModal = () => {
-    this.setState(() => ({commentModalOpen: false, username: '', text: ''}))
-  };
-
-  submitComment = (info) => {
-
-    const { username, body } = this.state;
-
-    this.setState({commentModalOpen: false, username: '', body: ''});
-    
-    if (info.method === 'add') {
-      this.props.addComment({username, body, parentId: this.props.post.id})
-    } else if (info.method === 'edit') {
-      this.props.editComment(info.commentId, info.parentId, body)
-    }
-  };
-
-  updateUsername = (username) => {
-    this.setState({ username })
-  };
-  updateBody = (body) => {
-    this.setState({ body })
-  };
-
   render() {
 
     const { post, deletePost, comments } = this.props;
-    const { commentsVisible, commentModalOpen, username, body } = this.state;
+    const { commentsVisible } = this.state;
     
     return (
       <Segment>
@@ -147,23 +116,16 @@ class Post extends Component {
                           <Feed.Like
                             as="a"
                             style={{'textDecoration': 'underline'}}
-                            onClick={() => this.showComments()}
-                          >show</Feed.Like>
+                            onClick={() => this.showComments()}>show</Feed.Like>
                           ) : (
                           <Feed.Like
                             style={{'textDecoration': 'underline', 'pointerEvents': 'none', 'cursor': 'default'}}
                           >show</Feed.Like>
                         ))}
                         <CommentModal
-                          title={'Add Comment'}
-                          closeCommentModal={this.closeCommentModal}
-                          commentModalOpen={commentModalOpen}
-                          username={username}
-                          body={body}
-                          updateUsername={this.updateUsername}
-                          updateBody={this.updateBody}
-                          submitComment={this.submitComment}
-                          trigger={<Feed.Like as="a" style={{'textDecoration': 'underline'}} onClick={() => this.openCommentModal('', '')}>+ comment</Feed.Like>}
+                          method={'Add'}
+                          parentId={post.id}
+                          showComments={this.showComments}
                         />
                       </Feed.Meta>
                     </Feed.Content>
@@ -190,21 +152,11 @@ class Post extends Component {
           )}
           {commentsVisible && comments && post.id in comments && (
           <Grid.Row className="colored-row" style={{'paddingBottom': '0'}}>
-            <Grid.Column width={3}>
-            </Grid.Column>
-            <Grid.Column width={13} textAlign='left' style={{'paddingLeft': '20px'}}>
+            <Grid.Column width={16} textAlign='left' style={{'paddingLeft': '20px'}}>
               <RenderComments
                 comments={comments[post.id]}
                 post={post}
                 getFormattedDate={this.getFormattedDate}
-                openCommentModal={this.openCommentModal}
-                closeCommentModal={this.closeCommentModal}
-                commentModalOpen={commentModalOpen}
-                username={username}
-                body={body}
-                updateUsername={this.updateUsername}
-                updateBody={this.updateBody}
-                submitComment={this.submitComment}
               />
             </Grid.Column>
           </Grid.Row>

@@ -5,7 +5,7 @@ import { uuid } from '../helpers/helpers.js';
 
 export const ADD_POST = 'ADD_POST';
 export const DELETE_POST = 'DELETE_POST';
-export const UPDATE_POST = 'UPDATE_POST;'
+export const UPDATE_POST = 'UPDATE_POST';
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const DELETE_COMMENT = 'DELETE_COMMENT';
 export const SORT_POSTS = 'SORT_POSTS';
@@ -23,7 +23,7 @@ export const GET_CATEGORIES = 'GET_CATEGORIES';
 
 export function addPost ({ category, username, title, body }) {
   return {
-    type: ADD_POST,
+    
     category,
     username,
     title,
@@ -108,7 +108,7 @@ export function getComments (items, info) {
 
 // Asynchronous functions
 
-export function editComment (commentId, parentId, body) {
+export function editComment ({ commentId, parentId, body }) {
   return (dispatch) => {
     
     let url = `http://localhost:3001/comments/${commentId}`;

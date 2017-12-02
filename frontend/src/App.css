@@ -21,8 +21,17 @@
   padding: 10px !important;
 }
 
+.comment-button {
+  padding: 10px !important;
+}
+
 .remove-button-comment-div {
   position: relative !important;
+}
+
+.avatar-column {
+  align-items:center !important;
+  text-align: center !important;
 }
 
 .App {
