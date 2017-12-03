@@ -3,10 +3,12 @@
  */
 
 import React, { Component } from 'react';
-import { Grid, Feed, Icon, Header, Image,
-  Segment, Divider, Label, Button, Popup} from 'semantic-ui-react'
-import { getItems, addComment, editComment } from '../actions/actions.js'
+import { Grid, Feed, Icon, Header,
+  Segment, Divider, Label, Button} from 'semantic-ui-react'
+import { getItems, deletePost, postVote } from '../actions/actions.js'
+import { capitalize } from '../helpers/helpers.js'
 import { connect } from 'react-redux'
+import PostModal from './PostModal.js'
 import RenderComments from './RenderComments.js'
 import CommentModal from './CommentModal.js'
 
@@ -67,7 +69,7 @@ class Post extends Component {
 
   render() {
 
-    const { post, deletePost, comments } = this.props;
+    const { post, deletePost, comments, postVote } = this.props;
     const { commentsVisible } = this.state;
     
     return (
@@ -75,12 +77,12 @@ class Post extends Component {
         <Grid stackable>
           <Grid.Row columns={2} divided>
           <Grid.Column width={3} verticalAlign={'middle'}>
-            <Label color='blue' size={'large'}>{post.category}</Label>
+            <Label color='blue' size={'large'}>{capitalize(post.category)}</Label>
           </Grid.Column>
           <Grid.Column width={13}>
             <Grid>
             <Grid.Row columns={2}>
-              <Grid.Column width={13}>
+              <Grid.Column width={11}>
                 <Feed size={'small'} style={{'paddingLeft': '5px'}}>
                   <Feed.Event key={post.id}>
                     <Feed.Content style={{'marginTop': '0'}}>
@@ -95,10 +97,12 @@ class Post extends Component {
                       <Feed.Meta>
                         {post.voteScore} Votes
                         <Feed.Like/>
-                        <Feed.Like>
+                        <Feed.Like onClick={()=>
+                            postVote({ postId: post.id, option: 'upVote' })}>
                           <Icon name="like outline"/>
                         </Feed.Like>
-                        <Feed.Like>
+                        <Feed.Like onClick={()=>
+                            postVote({ postId: post.id, option: 'downVote' })}>
                           <Icon name="dislike outline"/>
                         </Feed.Like>
                       </Feed.Meta>
@@ -132,16 +136,12 @@ class Post extends Component {
                   </Feed.Event>
                 </Feed>
               </Grid.Column>
-              <Grid.Column width={3} verticalAlign="middle" textAlign="center" stretched>
-                <div className="remove-button-div">
-                  <Popup
-                    trigger={<Button className="remove-button" icon='remove' onClick={deletePost} size="tiny"/>}
-                    content='Delete Post'
-                    position='bottom center'
-                    inverted
-                    size="mini"
-                  />
-                </div>
+              <Grid.Column width={5} verticalAlign="middle" textAlign="center">
+                <PostModal
+                  method={'Edit'}
+                  post={post}
+                />
+                <Button className="post-button" onClick={()=>deletePost({ postId: post.id })} size="tiny">Delete</Button>
               </Grid.Column>
               </Grid.Row>
               </Grid>
@@ -167,17 +167,17 @@ class Post extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({ comments }) => {
   return {
-    comments: state.comments
+    comments
   }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
       fetchComments: (url, info) => dispatch(getItems(url, info)),
-      addComment: ({ username, body, parentId }) => dispatch(addComment({ username, body, parentId })),
-      editComment: (commentId, parentId, body) => dispatch(editComment(commentId, parentId, body))
+      deletePost: ({ postId }) => dispatch(deletePost({ postId })),
+      postVote: ({ postId, option }) => dispatch(postVote({ postId, option }))
     };
 };
 

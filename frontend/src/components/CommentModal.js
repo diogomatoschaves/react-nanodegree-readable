@@ -3,7 +3,7 @@
  */
 
 import React, { Component } from 'react';
-import { Modal, TextArea, Form, Button, Header, Feed, Icon } from 'semantic-ui-react';
+import { Modal, TextArea, Form, Button, Header, Feed, Icon, Message } from 'semantic-ui-react';
 import { addComment, editComment } from '../actions/actions.js';
 import { connect } from 'react-redux';
 
@@ -12,15 +12,16 @@ class CommentModal extends Component {
   state = {
     username: '',
     body: '',
-    commentModalOpen: false
+    commentModalOpen: false,
+    message: ''
   };
 
   openCommentModal = (username, body) => {
-    this.setState(() => ({commentModalOpen: true, username, body}))
+    this.setState(() => ({commentModalOpen: true, username, body, message: ''}))
   };
 
   closeCommentModal = () => {
-    this.setState(() => ({commentModalOpen: false, username: '', text: ''}))
+    this.setState(() => ({commentModalOpen: false, username: '', body: '', message: ''}))
   };
 
   updateUsername = (username) => {
@@ -35,13 +36,28 @@ class CommentModal extends Component {
     const { username, body } = this.state;
     const { parentId, comment, method, showComments } = this.props;
 
-    this.setState({commentModalOpen: false, username: '', body: ''});
-
-    if (method === 'Add') {
-      this.props.addComment({ username, body, parentId }),
-      showComments()
-    } else if (method === 'Edit') {
-      this.props.editComment({ commentId: comment.id, parentId, body })
+    if (method === 'Edit') {
+      if (!body) {
+        const message = <Message negative>
+          <Message.Header>The comment text is a required field</Message.Header>
+        </Message>;
+        this.setState({ message })
+      }
+      else {
+        this.props.editComment({ commentId: comment.id, parentId, body });
+        this.setState({commentModalOpen: false, username: '', body: '', message: ''});
+      }
+    } else if (method === 'Add') {
+      if (!body || !username) {
+        const message = <Message negative>
+          <Message.Header>The username and comment text are both required fields</Message.Header>
+        </Message>;
+        this.setState({ message })
+      } else {
+        this.props.addComment({ username, body, parentId });
+        showComments();
+        this.setState({commentModalOpen: false, username: '', body: '', message: ''});
+      }
     }
   };
 
@@ -49,7 +65,7 @@ class CommentModal extends Component {
 
     const { comment, method } = this.props;
 
-    const {  username, body, commentModalOpen } = this.state;
+    const {  username, body, commentModalOpen, message } = this.state;
 
     let trigger;
 
@@ -67,6 +83,9 @@ class CommentModal extends Component {
       >
         <Header as="h3" content={`${method} Comment`}/>
         <Modal.Content>
+          {message && (
+            message
+          )}
           <Form>
             <Form.Group widths='equal'>
               {method === 'Add' ? (
@@ -113,7 +132,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
       addComment: ({ username, body, parentId }) => dispatch(addComment({ username, body, parentId })),
-      editComment: (commentId, parentId, body) => dispatch(editComment(commentId, parentId, body))
+      editComment: ({ commentId, parentId, body }) => dispatch(editComment({ commentId, parentId, body }))
     };
 };
 

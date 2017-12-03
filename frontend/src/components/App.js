@@ -6,7 +6,6 @@ import { getItems } from '../actions/actions.js'
 import ListPosts from './ListPosts.js'
 import SideMenu from './SideMenu.js'
 import NoMatch from './NoMatch.js'
-import { capitalize } from '../helpers/helpers'
 import 'typeface-roboto'
 import './../App.css';
 
@@ -17,36 +16,33 @@ class App extends Component {
   };
   
   componentDidMount() {
-    const { fetchPosts } = this.props;
+    const { fetchPosts, valueCategory } = this.props;
     
-    let url = `http://localhost:3001/posts`;
-    
-    fetchPosts(url, {type: 'posts'});
+    if (valueCategory === 1) {
 
+      let url = `http://localhost:3001/posts`;
+
+      fetchPosts(url, {type: 'posts'});
+    }
   }
 
   handleContextRef = contextRef => this.setState({ contextRef });
-
-  handleChangeSort = (e, { value }) => {
-    this.setState({ valueSort: value })
-  };
-
-  handleChangeCategory = (e, { value }) => {
-    const { posts, categoryOptions } = this.state;
-
-    let filteredPosts;
-    
-    value !== 1 ? filteredPosts = posts.filter((post) => (
-      capitalize(post.category) === categoryOptions[value-1].text))
-      : filteredPosts = posts;
-
-    this.setState({ valueCategory: value, filteredPosts: filteredPosts });
-  };
   
   render() {
 
-    const { contextRef, categoryOptions } = this.state;
-    const { posts } = this.props;
+    const { contextRef } = this.state;
+    const { valueSort } = this.props;
+    let { posts } = this.props;
+
+    const optionsSort = [
+      {key: 'voteScore', text: 'Vote Score', value: 1},
+      {key: 'timestamp', text: 'Date', value: 2}];
+
+    const sortProp = optionsSort.filter((option) => option.value === valueSort)[0].key;
+
+    posts = posts.sort((a, b) => {
+      return b[sortProp] - a[sortProp]
+    });
 
     return (
       <div className="App">
@@ -67,7 +63,6 @@ class App extends Component {
                   <Sticky context={contextRef}>
                     <SideMenu
                       handleChangeSort={this.handleChangeSort}
-                      handleChangeCategory={this.handleChangeCategory}
                     />
                   </Sticky>
                 </Grid.Column>
@@ -75,6 +70,7 @@ class App extends Component {
                   <div ref={this.handleContextRef}>
                   <ListPosts
                     posts={posts}
+                    optionsSort={optionsSort}
                   />
                   </div>
                 </Grid.Column>
@@ -90,54 +86,20 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ posts }) => {
+const mapStateToProps = ({ posts, valueCategory, categoryOptions, valueSort, optionsSort }) => {
   return {
-    posts: posts
+    posts,
+    valueCategory,
+    categoryOptions,
+    valueSort,
+    optionsSort
   }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-      fetchPosts: (url, info) => dispatch(getItems(url, info))
+      fetchPosts: (url, info) => dispatch(getItems(url, info)),
     };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
-
-// const category = 'react';
-//
-//     const { valueCategory, categoryOptions } = this.state;
-//
-//     let url = `http://localhost:3001/posts`;
-//     let headers = {headers: { 'Authorization': 'Diogo\'s readable project' }};
-//
-//     fetch(url, headers)
-//     .then((res) => res.json()).then((posts) => {
-//
-//       let comments = {};
-      // posts.map((post) => {
-      // let url = `http://localhost:3001/posts/${post.id}/comments`;
-      // fetch(url, headers)
-      //   .then((response) => response.json())
-      //   .then((response) => {
-      //     console.log(response);
-      //     this.setState((prevState) => {
-      //       return {
-      //         ...prevState,
-      //         ['comments']: {
-      //           ...prevState['comments'],
-      //           [post.id]: response
-      //         }
-      //       }
-      //     })
-      //   })
-      // });
-      //
-      // let filteredPosts;
-      //
-      // valueCategory !== 1 ? filteredPosts = posts.filter((post) => (
-      // capitalize(post.category) === categoryOptions[valueCategory-1].text))
-      // : filteredPosts = posts;
-      //
-      // this.setState({ posts, filteredPosts: filteredPosts });
-    // });

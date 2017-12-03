@@ -3,17 +3,25 @@
  */
 
 import React from 'react'
-import { Grid, Comment, Divider, Icon, Segment, Popup, Button } from 'semantic-ui-react'
-import { deleteComment } from '../actions/actions.js'
+import { Grid, Comment, Divider, Icon, Button } from 'semantic-ui-react'
+import { deleteComment, commentVote } from '../actions/actions.js'
 import { connect } from 'react-redux'
 import CommentModal from './CommentModal.js'
 
 
 const RenderComments = (props) => {
 
-  const { comments, getFormattedDate, deleteComment, post } = props;
+  const { getFormattedDate, deleteComment, post, commentVote } = props;
+  let { comments } = props;
+
+  comments = comments.sort((a, b) => {
+      return b['voteScore'] - a['voteScore']
+    });
 
   const avatars = ['elliot.jpg', 'jenny.jpg', 'joe.jpg', 'matt.jpg'];
+
+  const src = `../avatars/${avatars[Math.floor(Math.random() * 4)]}`;
+  console.log(src);
   
   return (
     <div>
@@ -27,7 +35,7 @@ const RenderComments = (props) => {
                       <Comment.Group>
                       <Comment className='avatar-column'>
                         <Comment.Avatar
-                          src={require(`../avatars/${avatars[Math.floor(Math.random() * 4)]}`)}
+                          src={comment.avatar}
                         />
                       </Comment>
                         </Comment.Group>
@@ -43,9 +51,14 @@ const RenderComments = (props) => {
                           <Comment.Text>{comment.body}</Comment.Text>
                           <Comment.Actions>
                             <div style={{'display': 'inline', 'paddingRight': '8px'}}>{comment.voteScore} Votes </div>
-                            <Comment.Action><Icon name="like outline"/></Comment.Action>
-                            <Comment.Action><Icon name="dislike outline"/></Comment.Action>
-                            <Comment.Action>Reply</Comment.Action>
+                            <Comment.Action as='a' onClick={()=>
+                            commentVote({ commentId: comment.id, parentId: post.id, option: 'upVote' })}>
+                              <Icon name="like outline"/>
+                            </Comment.Action>
+                            <Comment.Action onClick={()=>
+                            commentVote({ commentId: comment.id, parentId: post.id, option: 'downVote' })}>
+                              <Icon name="dislike outline"/>
+                            </Comment.Action>
                           </Comment.Actions>
                         </Comment.Content>
                       </Comment>
@@ -76,6 +89,7 @@ const mapDispatchStateToProps = () => {
 const mapDispatchToProps = (dispatch) => {
     return {
       deleteComment: (commentId, parentId) => dispatch(deleteComment(commentId, parentId)),
+      commentVote: ({ commentId, parentId, option }) => dispatch(commentVote({ commentId, parentId, option }))
     };
 };
 

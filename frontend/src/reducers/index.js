@@ -2,19 +2,22 @@
  * Created by diogomatoschaves on 01/12/2017.
  */
 
+import * as matt from '../avatars/matt.jpg';
+import * as elliot from '../avatars/elliot.jpg'
+import * as joe from '../avatars/joe.jpg'
+import * as jenny from '../avatars/jenny.jpg'
+import { capitalize } from '../helpers/helpers.js'
 import {
-  ADD_POST,
-  DELETE_POST,
   UPDATE_POST,
-  ADD_COMMENT,
-  DELETE_COMMENT,
   GET_POSTS,
   UPDATE_CATEGORY,
   GET_COMMENTS,
-  GET_CATEGORIES
+  GET_CATEGORIES,
+  UPDATE_SORT
 } from '../actions/actions.js';
 import { combineReducers } from 'redux'
 
+const avatars = [matt, elliot, jenny, joe];
 
 function posts(state = [], action) {
 
@@ -22,6 +25,7 @@ function posts(state = [], action) {
     case GET_POSTS:
       return action.items;
     case UPDATE_POST:
+      
       let oldPost = state.filter((post) => post.id === action.post.id);
 
       if (oldPost.length > 0) {
@@ -43,9 +47,13 @@ function comments(state = [], action) {
   
   switch (action.type) {
     case GET_COMMENTS:
+      const newComments = action.items.map((comment)=>{
+        comment['avatar'] = avatars[Math.floor(Math.random() * 4)];
+        return comment
+      });
       return {
         ...state,
-          [action.info.id]: action.items
+          [action.info.id]: newComments
       };
     
     default:
@@ -64,29 +72,39 @@ function valueCategory (state = 1, action) {
   }
 }
 
+function categoryOptions (state = [], action) {
+  
+  const { categories } = action;
+  
+  switch (action.type) {    
+    case GET_CATEGORIES:
+
+      let len = state.length;
+      return categories.reduce((optionsArr, currOption) => {
+        len++;
+        optionsArr.push({key: len, text: capitalize(currOption.name), value: len});
+        return optionsArr;
+      }, state);
+    default:
+      return state
+  }
+}
+
+function valueSort (state = 1, action) {
+  switch (action.type) {
+    case UPDATE_SORT:
+      return action.value;
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   posts,
   comments,
-  valueCategory
+  valueCategory,
+  categoryOptions,
+  valueSort
 })
-
-
-// function categoryOptions (state = [], action) {
-//  
-//   const { items } = action;
-//  
-//   switch (action.type) {
-//     case GET_CATEGORIES:
-//       let options = [{ key: 1, text: 'All Posts', value: 1 }];
-//      
-//       return
-//   }
-// }
-
-// case ADD_COMMENT:
-//       return {
-//         ...state['comments'],
-//         [action.parentId]: state['comments'][action.parentId].push(co)
-//       };
 
 

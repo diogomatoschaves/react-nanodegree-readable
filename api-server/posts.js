@@ -25,18 +25,18 @@ const defaultData = {
     deleted: false,
     commentCount: 0
   },
-  "6ni6ok3ym7mf1p33lnea": {
-    id: '6ni6ok3ym7mf1p33lnea',
-    timestamp: 1468479767190,
-    title: 'Learn Redux in 10 minutes!',
-    body: 'Just kidding. It takes more than 10 minutes to learn technology.',
-    author: 'thingone',
-    category: 'redux',
-    voteScore: -5,
+  "6ni6ojfhrm7mf1p33lnea": {
+    id: '6ni6ojfhrm7mf1p33lnea',
+    timestamp: 1498479767190,
+    title: 'Udacity\'s projects are not easy',
+    body: 'But that\'s a great thing :)',
+    author: 'Diogo',
+    category: 'udacity',
+    voteScore: 3,
     deleted: false,
     commentCount: 0
   }
-}
+};
 
 function getData (token) {
   let data = db[token]
