@@ -2,73 +2,85 @@
  * Created by diogomatoschaves on 29/11/2017.
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Post from './Post.js'
-import PostModal from './PostModal.js'
 import { Grid, Header, Segment, Dropdown } from 'semantic-ui-react'
 import { connect } from 'react-redux';
-import { changeSort } from '../actions/actions.js'
+import { withRouter } from 'react-router-dom'
+import { fetchCategory, getItems, updateCategory } from '../actions/actions.js'
 
 
-const ListPosts = (props) => {
+class ListPosts extends Component {
+  
+  // static propTypes = {
+  //   posts: PropTypes.array.isRequired
+  // };
+
+  componentDidMount() {
+    const { fetchCategory, updateCategory, fetchPosts, category } = this.props;
+
+    if (category === 'allposts') {
+
+      let url = `http://localhost:3001/posts`;
+
+      fetchPosts(url, {type: 'posts'});
+      updateCategory({}, {value: category})
+    } else {
+      fetchCategory({category});
+      updateCategory({}, {value: category})
+    }
+  }
+  
+  componentDidUpdate(prevProps, prevState) {
+
+    const { category } = this.props;
+
+    (prevProps.category !== category) && (
+
+      this.forceUpdate()
+    )
+  }
+  
+  render() {
     
-  const { posts, valueSort, handleChangeSort, optionsSort } = props;
+    const { valueSort, optionsSort } = this.props;
+    let { posts } = this.props;
+    
+    const sortProp = optionsSort.filter((option) => option.value === valueSort)[0].key;
 
-  return (
-    <div>
-     <Segment>
-       <Grid columns={3} divided stackable>
-         <Grid.Row>
-          <Grid.Column width={3} verticalAlign='middle' textAlign='center'>
-            <Header as='h3'>Category</Header>
-          </Grid.Column>
-          <Grid.Column width={9} verticalAlign='middle'>
-            <Header as='h3'>Posts</Header>
-          </Grid.Column>
-           <Grid.Column width={4} textAlign='center'>
-            <Dropdown
-              text='Sort Posts'
-              options={optionsSort}
-              button
-              compact
-              size={'tiny'}
-              onChange={handleChangeSort}
-              value={valueSort}
+    posts = posts.sort((a, b) => {
+      return b[sortProp] - a[sortProp]
+    });
+
+    return (
+      <div>
+        {(posts instanceof Array) && (
+          posts.map((post) => (
+            <Post
+              key={post.id}
+              post={post}
             />
-             <PostModal
-               method={'Add'}
-             />
-          </Grid.Column>
-         </Grid.Row>
-       </Grid>
-     </Segment>
-    {posts instanceof Array && (
-      posts.map((post) => (
-      <Post
-        key={post.id}
-        post={post}
-        getFormattedDate={this.getFormattedDate}
-      />
-    )))}
-  </div>
-  )
-};
+          )))}
+      </div>
+    )
+  }
+}
 
-ListPosts.propTypes = {
-    posts: PropTypes.array.isRequired
-};
-
-function mapStateToProps ({ valueSort }) {
+function mapStateToProps ({ valueSort, posts, optionsSort }) {
   return {
-    valueSort
+    valueSort,
+    posts,
+    optionsSort
   }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    handleChangeSort: (e, {value}) => dispatch(changeSort(e, {value}))
+    updateCategory: (e, { value }) => dispatch(updateCategory(e, { value })),
+    fetchCategory: ({ category }) => dispatch(fetchCategory({ category })),
+    fetchPosts: (url, info) => dispatch(getItems(url, info))
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListPosts)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ListPosts))

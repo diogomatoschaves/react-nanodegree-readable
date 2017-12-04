@@ -16,7 +16,8 @@ import CommentModal from './CommentModal.js'
 class Post extends Component {
 
   state = {
-    commentsVisible: false
+    commentsVisible: false,
+    collapse: true
   };
   
   getFormattedDate = (timeStamp) => {
@@ -52,7 +53,7 @@ class Post extends Component {
     const { fetchComments, post, comments } = this.props;
 
     if (comments && post.id in comments) {
-      this.setState(() => ({commentsVisible: true}))
+      this.setState(() => ({commentsVisible: true, collapse: false}))
 
     } else {
       let url = `http://localhost:3001/posts/${post.id}/comments`;
@@ -67,13 +68,29 @@ class Post extends Component {
     this.setState(() => ({commentsVisible: false}))
   };
 
+  toggle = () => {
+    this.setState({collapse: !this.state.collapse})
+  };
+
   render() {
 
     const { post, deletePost, comments, postVote } = this.props;
-    const { commentsVisible } = this.state;
+    const { commentsVisible, collapse } = this.state;
     
     return (
       <Segment>
+        {collapse ? (
+          <Grid stackable>
+            <Grid.Row columns={2} divided>
+              <Grid.Column width={3} verticalAlign={'middle'}>
+                <Label color='blue' size={'large'}>{capitalize(post.category)}</Label>
+              </Grid.Column>
+              <Grid.Column width={13} textAlign="left" verticalAlign="middle">
+                <Header as="h4">{post.title}</Header>
+              </Grid.Column>
+            </Grid.Row>
+            </Grid>
+        ) : (
         <Grid stackable>
           <Grid.Row columns={2} divided>
           <Grid.Column width={3} verticalAlign={'middle'}>
@@ -161,6 +178,12 @@ class Post extends Component {
             </Grid.Column>
           </Grid.Row>
           )}
+        </Grid>
+        )}
+        <Grid>
+          <Grid.Column style={{'padding': '3px'}} textAlign="center">
+            <Icon onClick={()=>this.toggle()} name="angle down"/>
+          </Grid.Column>
         </Grid>
       </Segment>
     )

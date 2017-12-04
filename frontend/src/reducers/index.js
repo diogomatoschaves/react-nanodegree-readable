@@ -2,6 +2,8 @@
  * Created by diogomatoschaves on 01/12/2017.
  */
 
+import React from 'react'
+import { Link } from 'react-router-dom'
 import * as matt from '../avatars/matt.jpg';
 import * as elliot from '../avatars/elliot.jpg'
 import * as joe from '../avatars/joe.jpg'
@@ -61,7 +63,7 @@ function comments(state = [], action) {
   }
 }
 
-function valueCategory (state = 1, action) {
+function valueCategory (state=null, action) {
 
   const { value } = action;
 
@@ -78,13 +80,17 @@ function categoryOptions (state = [], action) {
   
   switch (action.type) {    
     case GET_CATEGORIES:
-
-      let len = state.length;
-      return categories.reduce((optionsArr, currOption) => {
-        len++;
-        optionsArr.push({key: len, text: capitalize(currOption.name), value: len});
-        return optionsArr;
-      }, state);
+      
+      return { 
+        categories: categories.map(category => category.name),
+        categoryOptions: categories.reduce((optionsArr, currOption) => {
+          optionsArr.push({
+            key: currOption.name.toLowerCase().replace(' ', ''), 
+            text: <Link to={`/${currOption.name.toLowerCase().replace(' ', '')}`}>{capitalize(currOption.name)}</Link>,
+            value: currOption.name.toLowerCase().replace(' ', '')});
+          return optionsArr;
+        }, state)
+      };
     default:
       return state
   }
@@ -99,12 +105,20 @@ function valueSort (state = 1, action) {
   }
 }
 
+function optionsSort (state=[
+  {key: 'voteScore', text: 'Vote Score', value: 1},
+  {key: 'timestamp', text: 'Date', value: 2}], action) {
+
+  return state
+}
+
 export default combineReducers({
   posts,
   comments,
   valueCategory,
   categoryOptions,
-  valueSort
+  valueSort,
+  optionsSort
 })
 
 

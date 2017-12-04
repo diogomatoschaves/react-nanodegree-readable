@@ -312,7 +312,7 @@ export function fetchCategories () {
   return (dispatch) => {
     
     const url = `http://localhost:3001/categories`;
-
+    
     fetch(url,
       {headers: {
         'Authorization': 'Diogo\'s readable project' ,
@@ -326,17 +326,10 @@ export function fetchCategories () {
   }
 }
 
-export function fetchCategory ({ value, categoryOptions }) {
+export function fetchCategory ({ category }) {
   return (dispatch) => {
 
-    let url;
-
-    if (value !== 1) {
-      const category = categoryOptions.filter((option) => (option.value === value))[0].text.toLowerCase();
-      url = `http://localhost:3001/${category}/posts`;
-    } else {
-      url = `http://localhost:3001/posts`;
-    }
+    const url = `http://localhost:3001/${category}/posts`;
 
     fetch(url,
       {headers: {
@@ -350,10 +343,19 @@ export function fetchCategory ({ value, categoryOptions }) {
   }
 }
 
-export function updateCategoryPosts (e, { value }, categoryOptions) {
-  return (dispatch) => {
+export function updateCategoryPosts(e, { value }){
+
+  return dispatch => {
     dispatch(updateCategory(e, { value }));
-    dispatch(fetchCategory({ value, categoryOptions }))
+
+    if (value === 'allposts') {
+
+      const url = `http://localhost:3001/posts`;
+
+      dispatch(getItems(url, {type: 'posts'}));
+    } else {
+      dispatch(fetchCategory({category: value}));
+    }
   }
 }
 
@@ -365,6 +367,7 @@ export function updateSort ({ value }) {
 }
 
 export function updateCategory(e, { value }) {
+  
   return {
     type: UPDATE_CATEGORY,
     value
@@ -376,6 +379,8 @@ export function changeSort (e, { value }) {
     dispatch(updateSort({ value }));
   }
 }
+
+//  const category = categoryOptions.filter((option) => (option.value === value))[0].key.toLowerCase();
 
 
 

@@ -59,9 +59,9 @@ class PostModal extends Component {
 
     let trigger;
 
-    (method === 'Add') ? (trigger = <Button color='grey' size="small"
+    (method === 'Add') ? (trigger = <Button color='grey' size="small" className="post-button"
                                             onClick={()=>this.openPostModal('', '', '', '')}>
-      <Icon name='add'/>Add Post</Button>)
+      Add Post<Icon name='add'/></Button>)
       : (trigger = <Button onClick={()=> this.openPostModal(post.author, post.title, post.body, post.category)}
                            size="tiny"
                            className="post-button">Edit</Button>);

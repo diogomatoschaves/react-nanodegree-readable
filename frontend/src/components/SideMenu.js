@@ -6,34 +6,33 @@ import React, { Component } from 'react';
 import { Menu, Dropdown } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { updateCategoryPosts, fetchCategories } from '../actions/actions.js'
+import { Link } from 'react-router-dom'
 
 
 class SideMenu extends Component {
 
   componentDidMount() {
-
+  
     const { fetchCategories } = this.props;
-
+  
     fetchCategories()
   }
 
   render() {
 
-    const {
-      updateCategoryPosts, valueCategory, categoryOptions } = this.props;
-
+    const { updateCategoryPosts, valueCategory, categoryOptions } = this.props;
+    
     return (
       <div>
         <Menu pointing vertical fluid>
           <Menu.Item className='categories' name="Categories"/>
-
-          <Dropdown scrolling
-                    className='link item dropdown-category'
-                    onChange={(e, { value }) => updateCategoryPosts(e, { value }, categoryOptions)}
-                    options={categoryOptions}
-                    selection
-                    value={valueCategory}
-          />
+          <Dropdown
+            options={categoryOptions}
+            selection
+            onChange={(e, { value }) => updateCategoryPosts(e, { value })}
+            className='link item dropdown-category'
+            value={valueCategory}
+            />
         </Menu>
       </div>
     )
@@ -42,14 +41,14 @@ class SideMenu extends Component {
 
 function mapStateToProps ({ valueCategory, categoryOptions }) {
   return {
-    valueCategory: valueCategory,
-    categoryOptions: categoryOptions
+    valueCategory,
+    categoryOptions: categoryOptions.categoryOptions
   }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    updateCategoryPosts: (e, { value }, categoryOptions) => dispatch(updateCategoryPosts(e, { value }, categoryOptions)),
+    updateCategoryPosts: (e, { value }) => dispatch(updateCategoryPosts(e, { value })),
     fetchCategories: () => dispatch(fetchCategories())
   }
 }

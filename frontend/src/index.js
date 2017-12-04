@@ -9,17 +9,18 @@ import { Provider } from 'react-redux'
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk';
 import { logger } from 'redux-logger'
+import { Link } from 'react-router-dom'
 
 
 const reduxEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
   reducers,
-  {valueCategory: 1, 
+  { 
     valueSort: 1, 
     posts: [], 
-    comments: [], 
-    categoryOptions: [{ key: 1, text: 'All Posts', value: 1 }]
+    comments: [],
+    categoryOptions: [{ key: 'allposts', text: <Link to={`/`}>All Posts</Link>, value: 'allposts' }]
   },
   reduxEnhancers(applyMiddleware(thunk), applyMiddleware(logger))
 );
