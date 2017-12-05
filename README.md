@@ -24,7 +24,7 @@ details about the server.
 
 In order to install the server dependencies as per `api-server/package.json`, run the following commands on your terminal:
 
-`cd api-server`
+`cd api-server` <br>
 `npm install`
 
 In order to start the server, run:
@@ -35,7 +35,7 @@ In order to start the server, run:
 
 In order to install the frontend dependencies as per `frontend/package.json`, run the following commands on your terminal:
 
-`cd frontend`
+`cd frontend`<br>
 `npm install`.
 
 In order to start the development server, run:
