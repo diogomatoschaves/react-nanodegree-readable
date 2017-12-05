@@ -7,6 +7,7 @@ import { Modal, TextArea, Form, Button, Header, Feed, Icon, Message } from 'sema
 import { addComment, editComment } from '../actions/actions.js';
 import { connect } from 'react-redux';
 
+
 class CommentModal extends Component {
   
   state = {
@@ -24,17 +25,10 @@ class CommentModal extends Component {
     this.setState(() => ({commentModalOpen: false, username: '', body: '', message: ''}))
   };
 
-  updateUsername = (username) => {
-    this.setState({ username })
-  };
-  updateBody = (body) => {
-    this.setState({ body })
-  };
-
   submitComment = () => {
 
     const { username, body } = this.state;
-    const { parentId, comment, method, showComments } = this.props;
+    const { parentId, comment, method } = this.props;
 
     if (method === 'Edit') {
       if (!body) {
@@ -55,7 +49,6 @@ class CommentModal extends Component {
         this.setState({ message })
       } else {
         this.props.addComment({ username, body, parentId });
-        showComments();
         this.setState({commentModalOpen: false, username: '', body: '', message: ''});
       }
     }
@@ -125,7 +118,7 @@ class CommentModal extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = () => {
   return {}
 };
 

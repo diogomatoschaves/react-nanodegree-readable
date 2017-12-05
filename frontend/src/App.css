@@ -34,6 +34,11 @@
   text-align: center !important;
 }
 
+.router-link {
+  text-decoration: None !important;
+  color: inherit !important;
+}
+
 .App {
   text-align: center;
 }

@@ -2,7 +2,7 @@
  * Created by diogomatoschaves on 04/12/2017.
  */
 
-import React, { Component } from 'react';
+import React from 'react';
 import PostModal from './PostModal.js'
 import { Grid, Header, Segment, Dropdown } from 'semantic-ui-react'
 import { connect } from 'react-redux';

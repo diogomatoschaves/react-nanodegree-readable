@@ -5,8 +5,8 @@
 import React, { Component } from 'react';
 import { Menu, Dropdown } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { updateCategoryPosts, fetchCategories } from '../actions/actions.js'
-import { Link } from 'react-router-dom'
+import { updateCategory, fetchCategories } from '../actions/actions.js'
+import { withRouter } from 'react-router-dom'
 
 
 class SideMenu extends Component {
@@ -20,7 +20,7 @@ class SideMenu extends Component {
 
   render() {
 
-    const { updateCategoryPosts, valueCategory, categoryOptions } = this.props;
+    const { updateCategory, valueCategory, categoryOptions } = this.props;
     
     return (
       <div>
@@ -28,8 +28,6 @@ class SideMenu extends Component {
           <Menu.Item className='categories' name="Categories"/>
           <Dropdown
             options={categoryOptions}
-            selection
-            onChange={(e, { value }) => updateCategoryPosts(e, { value })}
             className='link item dropdown-category'
             value={valueCategory}
             />
@@ -48,9 +46,9 @@ function mapStateToProps ({ valueCategory, categoryOptions }) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    updateCategoryPosts: (e, { value }) => dispatch(updateCategoryPosts(e, { value })),
+    updateCategory: (e, { value }) => dispatch(updateCategory(e, { value })),
     fetchCategories: () => dispatch(fetchCategories())
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SideMenu)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SideMenu))

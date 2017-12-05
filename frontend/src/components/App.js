@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Grid, Segment, Header, Label, Sticky } from 'semantic-ui-react'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ListPosts from './ListPosts.js'
 import SideMenu from './SideMenu.js'
+import Error404 from './Error404.js'
 import NoMatch from './NoMatch.js'
-import NoCategory from './NoCategory.js'
 import ViewHeader from './ViewHeader.js'
-import { withRouter } from 'react-router-dom'
 import { fetchCategory, getItems } from '../actions/actions.js'
 import 'typeface-roboto'
 import './../App.css';
@@ -17,22 +16,6 @@ class App extends Component {
   state = {
     contextRef: true
   };
-  
-  // componentDidMount() {
-  //  
-  //   const { valueCategory, fetchCategory, fetchPosts } = this.props;
-  //
-  //   console.log({ valueCategory });
-  //  
-  //   if (valueCategory === 'allposts') {
-  //
-  //     let url = `http://localhost:3001/posts`;
-  //
-  //     fetchPosts(url, {type: 'posts'});
-  //   } else {
-  //     fetchCategory({ valueCategory });
-  //   }
-  // }
 
   handleContextRef = contextRef => this.setState({ contextRef });
   
@@ -40,11 +23,11 @@ class App extends Component {
 
     const { contextRef } = this.state;
     const { categories } = this.props;
-    
+
     return (
       <div className="App">
         <Switch>
-          <Route exact path="/" render={() => (
+          <Route exact path="/" render={({ location }) => (
             <Grid divided={true} stackable>
               <Grid.Row>
                 <Grid.Column width={16} verticalAlign={'middle'}>
@@ -66,6 +49,7 @@ class App extends Component {
                   <div ref={this.handleContextRef}>
                     <ViewHeader/>
                     <ListPosts
+                      location={location}
                       category="allposts"
                     />
                   </div>
@@ -75,7 +59,7 @@ class App extends Component {
               </Grid.Row>
             </Grid>
             )}/>
-          <Route path="/:category" render={({ match }) => (
+          <Route path="/:category" render={({ match, location }) => (
             <Grid divided={true} stackable>
               <Grid.Row>
                 <Grid.Column width={16} verticalAlign={'middle'}>
@@ -96,13 +80,14 @@ class App extends Component {
                 <Grid.Column  width={10}>
                   <div ref={this.handleContextRef}>
                     <ViewHeader/>
-                      {categories && categories.includes(match.params.category) ? (
-                        <ListPosts
-                          category={match.params.category}
-                        />
-                        ) : (
-                        <NoCategory/>
-                       )}
+                    {categories && categories.includes(match.params.category) ? (
+                      <ListPosts
+                        location={location}
+                        category={match.params.category}
+                      />
+                      ) : (
+                      <NoMatch noMatchType="category"/>
+                     )}
                   </div>
                 </Grid.Column>
                 <Grid.Column width={2}>
@@ -110,7 +95,7 @@ class App extends Component {
               </Grid.Row>
             </Grid>
           )}/>
-          <Route component={NoMatch} />
+          <Route component={Error404} />
         </Switch>
       </div>
     );

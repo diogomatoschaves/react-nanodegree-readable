@@ -86,7 +86,7 @@ function categoryOptions (state = [], action) {
         categoryOptions: categories.reduce((optionsArr, currOption) => {
           optionsArr.push({
             key: currOption.name.toLowerCase().replace(' ', ''), 
-            text: <Link to={`/${currOption.name.toLowerCase().replace(' ', '')}`}>{capitalize(currOption.name)}</Link>,
+            text: <Link className="router-link" to={`/${currOption.name.toLowerCase().replace(' ', '')}`}>{capitalize(currOption.name)}</Link>,
             value: currOption.name.toLowerCase().replace(' ', '')});
           return optionsArr;
         }, state)

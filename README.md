@@ -1,22 +1,47 @@
-# Readable API Server
+# Readable Project - Udacity's React Nanodegree 2nd Project
 
-This is the starter project for the final assessment project for Udacity's Redux course where you will build a content and comment web app. Users will be able to post content to predefined categories, comment on their posts and other users' posts, and vote on posts and comments. Users will also be able to edit and delete posts and comments.
+This project is a fork of the Readable starter repo (https://github.com/udacity/reactnd-project-readable-starter),
+and encompasses the implementation of all the functionality as per the project's requirements.
 
-This repository includes the code for the backend API Server that you'll use to develop and interact with the front-end portion of the project.
+The app is a user interface for viewing, adding, editing and deleting posts pertaining to particular categories, as well as
+viewing, adding, editing and deleting comments of existing posts. It also has a vote system where the user can vote or
+upvote particular posts or comments. The app presents a main view that lists all exisiting posts, and has a side menu
+where the user can choose to view posts of a particular category. The posts can be sorted by date or by vote score.
 
-## Start Developing
+The app's functionality was implemented with React and Redux.
 
-To get started developing right away:
+## Prerequisites
 
-* Install and start the API server
-    - `cd api-server`
-    - `npm install`
-    - `node server`
-* In another terminal window, use Create React App to scaffold out the front-end
-    - `create-react-app frontend`
-    - `cd frontend`
-    - `npm start`
+You need to have npm installed on your computer.
 
-## API Server
+## Installing & Usage
 
-Information about the API server and how to use it can be found in its [README file](api-server/README.md).
+This repo is split between the server api and the frontend. In order to run the app you'll need to run npm install
+on each subdirectory (api-server and frontend). You can check out the README on the api-server directory for more
+details about the server.
+
+### Install Server dependencies and run server
+
+In order to install the server dependencies as per `api-server/package.json`, run the following commands on your terminal:
+
+`cd api-server`
+`npm install`
+
+In order to start the server, run:
+
+`node server`
+
+### Install Frontend (React App) dependencies
+
+In order to install the frontend dependencies as per `frontend/package.json`, run the following commands on your terminal:
+
+`cd frontend`
+`npm install`.
+
+In order to start the development server, run:
+
+`npm start`
+
+## Authors
+
+* Diogo Matos Chaves

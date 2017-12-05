@@ -7,6 +7,7 @@ import { Modal, TextArea, Form, Button, Header, Icon, Message } from 'semantic-u
 import { addPost, editPost } from '../actions/actions.js';
 import { connect } from 'react-redux';
 
+
 class PostModal extends Component {
   
   state = {
