@@ -14,9 +14,16 @@ import NoMatch from './NoMatch.js'
 
 class ListPosts extends Component {
   
-  // static propTypes = {
-  //   posts: PropTypes.array.isRequired
-  // };
+  static propTypes = {
+    posts: PropTypes.array.isRequired,
+    category: PropTypes.string.isRequired,
+    location: PropTypes.object.isRequired,
+    fetchCategory: PropTypes.func.isRequired,
+    updateCategory: PropTypes.func.isRequired,
+    fetchPosts: PropTypes.func.isRequired,
+    valueSort: PropTypes.number.isRequired,
+    optionsSort: PropTypes.array.isRequired
+  };
 
   componentDidMount() {
     const { fetchCategory, updateCategory, fetchPosts, category } = this.props;

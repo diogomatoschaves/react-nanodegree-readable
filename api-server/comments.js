@@ -7,8 +7,9 @@ const defaultData = {
   "894tuq4ut84ut8v4t8wun89g": {
     id: '894tuq4ut84ut8v4t8wun89g',
     parentId: "8xf0y6ziyjabvozdd253nd",
+    avatar: `matt.jpg`,
     timestamp: 1468166872634,
-    body: 'Hi there! I am a COMMENT.',
+    body: 'Hi there! I am a COMMENT. Aren\'t you?',
     author: 'thingtwo',
     voteScore: 6,
     deleted: false,
@@ -17,6 +18,7 @@ const defaultData = {
   "8tu4bsun805n8un48ve89": {
     id: '8tu4bsun805n8un48ve89',
     parentId: "8xf0y6ziyjabvozdd253nd",
+    avatar: `jenny.jpg`,
     timestamp: 1469479767190,
     body: 'Comments. Are. Cool.',
     author: 'thingone',
@@ -62,9 +64,10 @@ function add (token, comment) {
       id: comment.id,
       timestamp: comment.timestamp,
       body: comment.body,
+      avatar: comment.avatar,
       author: comment.author,
       parentId: comment.parentId,
-      voteScore: 1,
+      voteScore: 0,
       deleted: false,
       parentDeleted: false
     }
@@ -95,7 +98,7 @@ function vote (token, id, option) {
 function disableByParent (token, post) {
     return new Promise((res) => {
         let comments = getData(token)
-        keys = Object.keys(comments)
+        let keys = Object.keys(comments)
         filtered_keys = keys.filter(key => comments[key].parentId === post.id)
         filtered_keys.forEach(key => comments[key].parentDeleted = true)
         res(post)

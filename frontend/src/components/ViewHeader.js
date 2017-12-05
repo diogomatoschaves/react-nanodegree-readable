@@ -7,6 +7,7 @@ import PostModal from './PostModal.js'
 import { Grid, Header, Segment, Dropdown } from 'semantic-ui-react'
 import { connect } from 'react-redux';
 import { changeSort } from '../actions/actions.js'
+import PropTypes from 'prop-types';
 
 
 const ViewHeader = (props) => {
@@ -41,6 +42,12 @@ const ViewHeader = (props) => {
           </Grid>
         </Segment>
     )
+};
+
+ViewHeader.propTypes = {
+  valueSort: PropTypes.number.isRequired,
+  changeSort: PropTypes.func.isRequired,
+  optionsSort: PropTypes.array.isRequired
 };
 
 function mapStateToProps ({ valueSort, optionsSort }) {

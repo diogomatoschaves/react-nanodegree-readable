@@ -12,9 +12,19 @@ import { connect } from 'react-redux'
 import PostModal from './PostModal.js'
 import RenderComments from './RenderComments.js'
 import CommentModal from './CommentModal.js'
+import PropTypes from 'prop-types';
 
 
 class DetailPost extends Component {
+
+  static propTypes = {
+    fetchComments: PropTypes.func.isRequired,
+    post: PropTypes.object.isRequired,
+    deletePost: PropTypes.func.isRequired,
+    getFormattedDate: PropTypes.func.isRequired,
+    comments: PropTypes.object.isRequired,
+    postVote: PropTypes.func.isRequired
+  };
   
   state = {
     commentsVisible: true

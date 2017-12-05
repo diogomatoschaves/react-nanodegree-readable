@@ -6,9 +6,15 @@ import React, { Component } from 'react';
 import { Header, Segment } from 'semantic-ui-react'
 import { connect } from 'react-redux';
 import { updateCategory } from '../actions/actions.js'
+import PropTypes from 'prop-types';
 
 
 class NoMatch extends Component {
+  
+  static propTypes = {
+    updateCategory: PropTypes.func.isRequired,
+    noMatchType: PropTypes.string.isRequired
+  };
 
   componentDidMount() {
 

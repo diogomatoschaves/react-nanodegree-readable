@@ -6,9 +6,15 @@ import React, { Component } from 'react';
 import { Modal, TextArea, Form, Button, Header, Icon, Message } from 'semantic-ui-react';
 import { addPost, editPost } from '../actions/actions.js';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 
 class PostModal extends Component {
+  
+  static propTypes = {
+    post: PropTypes.object,
+    method: PropTypes.string.isRequired
+  };
   
   state = {
     postModalOpen: false,
@@ -62,7 +68,7 @@ class PostModal extends Component {
 
     (method === 'Add') ? (trigger = <Button color='grey' size="small" className="post-button"
                                             onClick={()=>this.openPostModal('', '', '', '')}>
-      Add Post<Icon name='add'/></Button>)
+      Add Post <div style={{'display': 'inline'}}><Icon name='add'/></div></Button>)
       : (trigger = <Button onClick={()=> this.openPostModal(post.author, post.title, post.body, post.category)}
                            size="tiny"
                            className="post-button">Edit</Button>);

@@ -19,7 +19,7 @@ const store = createStore(
   { 
     valueSort: 1, 
     posts: [], 
-    comments: [],
+    comments: {},
     categoryOptions: [{ 
       key: 'allposts', 
       text: <Link className="router-link" to={`/`}>All Posts</Link>, 

@@ -6,9 +6,16 @@ import React, { Component } from 'react';
 import { Modal, TextArea, Form, Button, Header, Feed, Icon, Message } from 'semantic-ui-react';
 import { addComment, editComment } from '../actions/actions.js';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 
 class CommentModal extends Component {
+  
+  static propTypes = {
+    parentId: PropTypes.string.isRequired, 
+    comment: PropTypes.object,
+    method: PropTypes.string.isRequired
+  };
   
   state = {
     username: '',

@@ -10,11 +10,18 @@ import ViewHeader from './ViewHeader.js'
 import { fetchCategory, getItems } from '../actions/actions.js'
 import 'typeface-roboto'
 import './../App.css';
+import PropTypes from 'prop-types';
+
 
 class App extends Component {
   
+  static propTypes = {
+    categories: PropTypes.array,
+    categoryOptions: PropTypes.array
+  };
+  
   state = {
-    contextRef: true
+    contextRef: {contextRef: true}
   };
 
   handleContextRef = contextRef => this.setState({ contextRef });
@@ -102,11 +109,10 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ categoryOptions, valueCategory }) => {
+const mapStateToProps = ({ categoryOptions }) => {
   return {
     categoryOptions: categoryOptions.categoryOptions,
     categories: categoryOptions.categories,
-    valueCategory
   }
 };
 

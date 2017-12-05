@@ -5,11 +5,18 @@
 import React, { Component } from 'react';
 import { Menu, Dropdown } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { updateCategory, fetchCategories } from '../actions/actions.js'
+import { fetchCategories } from '../actions/actions.js'
 import { withRouter } from 'react-router-dom'
+import PropTypes from 'prop-types';
 
 
 class SideMenu extends Component {
+  
+  static propTypes = {
+    fetchCategories: PropTypes.func.isRequired,
+    valueCategory: PropTypes.string,
+    categoryOptions: PropTypes.array
+  };
 
   componentDidMount() {
   
@@ -20,7 +27,7 @@ class SideMenu extends Component {
 
   render() {
 
-    const { updateCategory, valueCategory, categoryOptions } = this.props;
+    const { valueCategory, categoryOptions } = this.props;
     
     return (
       <div>
@@ -46,7 +53,6 @@ function mapStateToProps ({ valueCategory, categoryOptions }) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    updateCategory: (e, { value }) => dispatch(updateCategory(e, { value })),
     fetchCategories: () => dispatch(fetchCategories())
   }
 }

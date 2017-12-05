@@ -4,10 +4,6 @@
 
 import React from 'react'
 import { Link } from 'react-router-dom'
-import * as matt from '../avatars/matt.jpg';
-import * as elliot from '../avatars/elliot.jpg'
-import * as joe from '../avatars/joe.jpg'
-import * as jenny from '../avatars/jenny.jpg'
 import { capitalize } from '../helpers/helpers.js'
 import {
   UPDATE_POST,
@@ -19,7 +15,6 @@ import {
 } from '../actions/actions.js';
 import { combineReducers } from 'redux'
 
-const avatars = [matt, elliot, jenny, joe];
 
 function posts(state = [], action) {
 
@@ -49,13 +44,9 @@ function comments(state = [], action) {
   
   switch (action.type) {
     case GET_COMMENTS:
-      const newComments = action.items.map((comment)=>{
-        comment['avatar'] = avatars[Math.floor(Math.random() * 4)];
-        return comment
-      });
       return {
         ...state,
-          [action.info.id]: newComments
+          [action.info.id]: action.items
       };
     
     default:
@@ -120,5 +111,10 @@ export default combineReducers({
   valueSort,
   optionsSort
 })
+
+/*const newComments = action.items.map((comment)=>{
+        comment['avatar'] = avatars[Math.floor(Math.random() * 4)];
+        return comment
+      });*/
 
 

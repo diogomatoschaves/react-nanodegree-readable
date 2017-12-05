@@ -244,13 +244,16 @@ export function addComment ({ username, body, parentId }) {
   return (dispatch) => {
     
     let url = 'http://localhost:3001/comments';
+    
+    const avatars = ['matt.jpg', 'elliot.jpg', 'jenny.jpg', 'joe.jpg'];
 
     const payload = {
       id: uuid(),
       timestamp: new Date().getTime(),
       body,
       author: username,
-      parentId
+      parentId,
+      avatar: `${avatars[Math.floor(Math.random() * 4)]}`
     };
 
     fetch(url, {

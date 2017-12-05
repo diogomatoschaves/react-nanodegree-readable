@@ -8,7 +8,8 @@ viewing, adding, editing and deleting comments of existing posts. It also has a 
 upvote particular posts or comments. The app presents a main view that lists all exisiting posts, and has a side menu
 where the user can choose to view posts of a particular category. The posts can be sorted by date or by vote score.
 
-The app's functionality was implemented with React and Redux.
+The app's functionality was implemented with React and Redux, and uses Semantic UI React components
+(refer to https://react.semantic-ui.com).
 
 ## Prerequisites
 

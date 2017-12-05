@@ -7,6 +7,7 @@ import { Grid, Comment, Divider, Icon, Button } from 'semantic-ui-react'
 import { deleteComment, commentVote } from '../actions/actions.js'
 import { connect } from 'react-redux'
 import CommentModal from './CommentModal.js'
+import PropTypes from 'prop-types';
 
 
 const RenderComments = (props) => {
@@ -17,11 +18,8 @@ const RenderComments = (props) => {
   comments = comments.sort((a, b) => {
       return b['voteScore'] - a['voteScore']
     });
-
-  const avatars = ['elliot.jpg', 'jenny.jpg', 'joe.jpg', 'matt.jpg'];
-
-  const src = `../avatars/${avatars[Math.floor(Math.random() * 4)]}`;
-  console.log(src);
+  
+  comments.map(comment => console.log(comment.avatar));
   
   return (
     <div>
@@ -35,7 +33,7 @@ const RenderComments = (props) => {
                       <Comment.Group>
                       <Comment className='avatar-column'>
                         <Comment.Avatar
-                          src={comment.avatar}
+                          src={require(`../avatars/${comment.avatar}`)}
                         />
                       </Comment>
                         </Comment.Group>
@@ -82,6 +80,13 @@ const RenderComments = (props) => {
   )
 };
 
+RenderComments.propTypes = {
+  getFormattedDate: PropTypes.func.isRequired,
+  deleteComment: PropTypes.func.isRequired,
+  commentVote: PropTypes.func.isRequired,
+  post: PropTypes.object.isRequired
+};
+
 const mapDispatchStateToProps = () => {
   return {}
 };
@@ -94,8 +99,3 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapDispatchStateToProps, mapDispatchToProps)(RenderComments)
-
-// style={{'display':'flex', 'alignItems':'left'}}
-// <Comment.Avatar src='/assets/images/avatar/small/matt.jpg'/>
-//             <Segment key={comment.id}>
-
