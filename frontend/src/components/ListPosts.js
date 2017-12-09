@@ -15,7 +15,7 @@ import NoMatch from './NoMatch.js'
 class ListPosts extends Component {
   
   static propTypes = {
-    posts: PropTypes.array.isRequired,
+    posts: PropTypes.object.isRequired,
     category: PropTypes.string.isRequired,
     location: PropTypes.object.isRequired,
     fetchCategory: PropTypes.func.isRequired,
@@ -92,23 +92,23 @@ class ListPosts extends Component {
   
   render() {
     
-    const { valueSort, optionsSort, category } = this.props;
-    let { posts } = this.props;
-    
-    const postsIds = posts.map(post => post.id);
-    
+    const { valueSort, optionsSort, category, posts } = this.props;
+    const postsIds = this.props.posts.allIds;
+
     const sortProp = optionsSort.filter((option) => option.value === valueSort)[0].key;
 
-    posts = posts.sort((a, b) => {
-      return b[sortProp] - a[sortProp]
+    const orderedIds = postsIds.sort((a, b) => {
+      return posts['byId'][b][sortProp] - posts['byId'][a][sortProp]
     });
+
+    const orderedPosts = orderedIds.map(id => posts['byId'][id]);
 
     return (
       <div>
         <Route exact path="/" render={() => (
           <div>
-            {(posts instanceof Array) && (
-              posts.map((post) => (
+            {(orderedPosts instanceof Array) && (
+              orderedPosts.map((post) => (
                 <Post
                   key={post.id}
                   post={post}
@@ -119,8 +119,8 @@ class ListPosts extends Component {
          )}/>
         <Route exact path={`/${category}`} render={() => (
           <div>
-            {(posts instanceof Array) && (
-              posts.map((post) => (
+            {(orderedPosts instanceof Array) && (
+              orderedPosts.map((post) => (
                 <Post
                   key={post.id}
                   post={post}
@@ -133,7 +133,7 @@ class ListPosts extends Component {
           <div>
             {postsIds && postsIds.includes(match.params.id) ? (
               <DetailPost
-                post={posts.filter(post => post.id === match.params.id)[0]}
+                post={orderedPosts.filter(post => post.id === match.params.id)[0]}
                 location={location}
                 getFormattedDate={this.getFormattedDate}
               />

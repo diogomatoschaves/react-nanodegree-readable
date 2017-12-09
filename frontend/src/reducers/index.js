@@ -20,20 +20,37 @@ function posts(state = [], action) {
 
   switch (action.type) {
     case GET_POSTS:
-      return action.items;
+      let newState = {};
+      newState['byId'] = {};
+      newState['allIds'] = [];
+      action.items.forEach(post => {
+        newState.byId[post.id] = post;
+        newState.allIds.push(post.id)
+      });
+      return newState;
     case UPDATE_POST:
-      
-      let oldPost = state.filter((post) => post.id === action.post.id);
+
+      const oldPost = state.allIds.filter((postId) => postId === action.post.id);
 
       if (oldPost.length > 0) {
-        return state.map((post) => {
-         if (post.id === action.post.id) {
-           return action.post;
-         } else {
-           return post;
-         }})
+        return {
+          ...state,
+          byId: {
+            ...state.byId,
+            [action.post.id]: action.post
+          }
+        }
       } else {
-        return state.push(action.post)
+        return {
+          ...state,
+          byId: {
+            ...state.byId,
+            [action.post.id]: action.post
+          },
+          allIds: {
+            ...state.allIds.push(action.post.id)
+          }
+        }
       }
     default:
       return state
@@ -116,5 +133,26 @@ export default combineReducers({
         comment['avatar'] = avatars[Math.floor(Math.random() * 4)];
         return comment
       });*/
+
+/*// } else {
+      //   newState.byId[action.post.id] = action.post;
+      //   return newState
+      //   return {
+      //
+      //   }
+      // }
+      //
+      // if (oldPost.length > 0) {
+      //   newState = prevState.allIds.forEach((postId) => {
+      //    if (postId === action.post.id) {
+      //      return action.post;
+      //    } else {
+      //      return post;
+      //    }})
+      // } else {
+      //   let newState = state;
+      //   newState.push(action.post);
+      //   return newState
+      // }*/
 
 

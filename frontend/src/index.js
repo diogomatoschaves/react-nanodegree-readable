@@ -18,7 +18,7 @@ const store = createStore(
   reducers,
   { 
     valueSort: 1, 
-    posts: [], 
+    posts: {'byId': {}, 'allIds': []}, 
     comments: {},
     categoryOptions: [{ 
       key: 'allposts', 
