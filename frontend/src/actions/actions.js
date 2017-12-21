@@ -49,6 +49,8 @@ export function addPost ({ category, username, title, body }) {
       category,
       title
     };
+    
+    dispatch(addPostStore(payload));
 
     fetch(url, {
       headers: {
@@ -60,11 +62,24 @@ export function addPost ({ category, username, title, body }) {
       body: JSON.stringify(payload)
       })
     .then((res) => {
-      dispatch(getItems(`http://localhost:3001/posts`, {type: 'posts'}))
     })
     .catch((res) => (console.log(res)));
   }
 }
+
+export function addPostStore({ id, category, timestamp, body, title, author }) {
+  return {
+    type: ADD_POST,
+    id, 
+    category, 
+    timestamp,
+    body,
+    title,
+    author
+  }
+}
+
+// Edit post
 
 export function editPost ({ postId, title, body }) {
   return (dispatch) => {
@@ -73,8 +88,11 @@ export function editPost ({ postId, title, body }) {
     
     const payload = {
       body,
-      title
+      title,
+      postId
     };
+
+    dispatch(updatePost(payload));
 
     fetch(url, {
       headers: {
@@ -86,14 +104,16 @@ export function editPost ({ postId, title, body }) {
       body: JSON.stringify(payload)
       })
     .then((res) => {
-      dispatch(getItems(`http://localhost:3001/posts`, {type: 'posts'}));
     })
     .catch((res) => (console.log(res)));
   }
 }
 
+
 export function deletePost ({ postId }) {
   return (dispatch) => {
+    
+    dispatch(deletePostStore({ postId }));
     
     const url = `http://localhost:3001/posts/${postId}`;
     
@@ -106,14 +126,26 @@ export function deletePost ({ postId }) {
       method: 'DELETE'
     })
     .then((res) => {
-      dispatch(getItems(`http://localhost:3001/posts`, {type: 'posts'}));
+      
     })
     .catch((res) => (console.log(res)));
   }
 }
 
-export function postVote({ postId, option }) {
+function deletePostStore ({ postId }) {
+  return {
+    type: DELETE_POST,
+    postId
+  }
+}
+
+export function postVote({ postId, option, voteScore }) {
   return (dispatch) => {
+
+    let newVoteScore;
+    option === 'upVote' ? newVoteScore = voteScore + 1 : newVoteScore = voteScore - 1;
+
+    dispatch(updatePost({ postId, voteScore: newVoteScore }));
 
     let url = `http://localhost:3001/posts/${postId}`;
 
@@ -131,7 +163,6 @@ export function postVote({ postId, option }) {
       body: JSON.stringify(payload)
     })
       .then((res) => {
-        dispatch(getPost(postId));
       })
   }
 }

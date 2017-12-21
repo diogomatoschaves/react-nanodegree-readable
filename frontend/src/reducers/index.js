@@ -6,12 +6,14 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { capitalize } from '../helpers/helpers.js'
 import {
+  ADD_POST,
   UPDATE_POST,
   GET_POSTS,
   UPDATE_CATEGORY,
   GET_COMMENTS,
   GET_CATEGORIES,
-  UPDATE_SORT
+  UPDATE_SORT,
+  DELETE_POST
 } from '../actions/actions.js';
 import { combineReducers } from 'redux'
 
@@ -30,28 +32,48 @@ function posts(state = [], action) {
       return newState;
     case UPDATE_POST:
 
-      const oldPost = state.allIds.filter((postId) => postId === action.post.id);
+      let updatedPost = state.byId[action.post.postId];
 
-      if (oldPost.length > 0) {
-        return {
-          ...state,
-          byId: {
-            ...state.byId,
-            [action.post.id]: action.post
+      Object.keys(action.post).forEach(key => {
+        updatedPost[key] = action.post[key]
+      });
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.post.postId]: updatedPost 
+        },
+        allIds: [...state.allIds]
+      };
+    case ADD_POST:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.id]: {
+            id: action.id,
+            deleted: false,
+            category: action.category,
+            timestamp: action.timestamp,
+            author: action.author,
+            title: action.title,
+            body: action.body,
+            commentCount: 0,
+            voteScore: 1
           }
+        },
+        allIds: [...state.allIds, action.id]
+      };
+    case DELETE_POST:
+      return Object.keys(state.byId).reduce((posts, id) => {
+        if (id === action.postId) {
+          return posts
+        } else {
+          posts.byId[id] = state.byId[id];
+          posts.allIds = [...posts.allIds, id];
+          return posts
         }
-      } else {
-        return {
-          ...state,
-          byId: {
-            ...state.byId,
-            [action.post.id]: action.post
-          },
-          allIds: {
-            ...state.allIds.push(action.post.id)
-          }
-        }
-      }
+      }, {byId: {}, allIds: []});
     default:
       return state
   }
@@ -154,5 +176,40 @@ export default combineReducers({
       //   newState.push(action.post);
       //   return newState
       // }*/
+
+/*/*case UPDATE_POST:
+
+      const oldPost = state.allIds.filter((postId) => postId === action.post.id);
+
+      if (oldPost.length > 0) {
+        return {
+          ...state,
+          byId: {
+            ...state.byId,
+            [action.post.id]: action.post
+          }
+        }
+      } else {
+        return {
+          ...state,
+          byId: {
+            ...state.byId,
+            [action.post.id]: action.post
+          },
+          allIds: [...state.allIds, action.post.id]
+        }
+      }*/
+
+/*const updatedPost = Object.keys(state.byId[action.post.postId]).reduce((post, key) => {
+        if (action.post[key]) {
+          post[key] = action.post[key];
+          return post
+        } else if (key === 'voteScore' && action.post.voteScore === 0) {
+
+        } else {
+          post[key] = state.byId[action.post.postId][key];
+          return post
+        }
+      }, {}); */
 
 

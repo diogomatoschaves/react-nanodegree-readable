@@ -42,12 +42,12 @@ const Post = (props) => {
                             <Feed.Meta >
                               {post.voteScore} Votes
                               <Feed.Like/>
-                              <Feed.Like onClick={()=>
-                                  postVote({ postId: post.id, option: 'upVote' })}>
+                              <Feed.Like onClick={()=> {
+                                  postVote({ postId: post.id, option: 'upVote', voteScore: post.voteScore })}}>
                                 <Icon name="like outline"/>
                               </Feed.Like>
                               <Feed.Like onClick={()=>
-                                  postVote({ postId: post.id, option: 'downVote' })}>
+                                  postVote({ postId: post.id, option: 'downVote', voteScore: post.voteScore })}>
                                 <Icon name="dislike outline"/>
                               </Feed.Like>
                             </Feed.Meta>
@@ -89,7 +89,7 @@ const mapStateToProps = () => {
 const mapDispatchToProps = (dispatch) => {
     return {
       deletePost: ({ postId }) => dispatch(deletePost({ postId })),
-      postVote: ({ postId, option }) => dispatch(postVote({ postId, option }))
+      postVote: ({ postId, option, voteScore }) => dispatch(postVote({ postId, option, voteScore }))
     };
 };
 
