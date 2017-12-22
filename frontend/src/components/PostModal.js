@@ -31,8 +31,8 @@ class PostModal extends Component {
 
   submitPost = () => {
 
-    const {username, body, title, category} = this.state;
-    const {post, method} = this.props;
+    const { username, body, title, category } = this.state;
+    const { post, method, history } = this.props;
 
     if (method === 'Edit') {
       if (!body || !title) {
@@ -54,6 +54,7 @@ class PostModal extends Component {
       } else {
         this.props.addPost({username, body, title, category: category.toLowerCase()});
         this.setState({postModalOpen: false, username: '', body: '', title: '', category: '', message: ''});
+        history.push('/')
       }
     }
   };

@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Post from './Post.js'
 import { connect } from 'react-redux';
-import { Route } from 'react-router-dom'
+import { Route, withRouter } from 'react-router-dom'
 import { fetchCategory, getItems, updateCategory } from '../actions/actions.js'
 import DetailPost from './DetailPost.js'
 import NoMatch from './NoMatch.js'
@@ -163,4 +163,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListPosts)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ListPosts))

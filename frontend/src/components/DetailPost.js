@@ -13,6 +13,7 @@ import PostModal from './PostModal.js'
 import RenderComments from './RenderComments.js'
 import CommentModal from './CommentModal.js'
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom'
 
 
 class DetailPost extends Component {
@@ -50,7 +51,7 @@ class DetailPost extends Component {
     
     const { post, deletePost, getFormattedDate, comments, postVote } = this.props;
     const { commentsVisible } = this.state;
-    
+
     return (
       <Segment>
       <Grid stackable>
@@ -77,11 +78,11 @@ class DetailPost extends Component {
                         {post.voteScore} Votes
                         <Feed.Like/>
                         <Feed.Like onClick={()=>
-                            postVote({ postId: post.id, option: 'upVote' })}>
+                            postVote({ postId: post.id, option: 'upVote', voteScore: post.voteScore })}>
                           <Icon name="like outline"/>
                         </Feed.Like>
                         <Feed.Like onClick={()=>
-                            postVote({ postId: post.id, option: 'downVote' })}>
+                            postVote({ postId: post.id, option: 'downVote', voteScore: post.voteScore  })}>
                           <Icon name="dislike outline"/>
                         </Feed.Like>
                       </Feed.Meta>
@@ -151,11 +152,11 @@ const mapDispatchToProps = (dispatch) => {
     return {
       fetchComments: (url, info) => dispatch(getItems(url, info)),
       deletePost: ({ postId }) => dispatch(deletePost({ postId })),
-      postVote: ({ postId, option }) => dispatch(postVote({ postId, option }))
+      postVote: ({ postId, option, voteScore }) => dispatch(postVote({ postId, option, voteScore }))
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DetailPost)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DetailPost))
 
  // (post.commentCount ?
 // ) : (

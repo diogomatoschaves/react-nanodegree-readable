@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 
 const ViewHeader = (props) => {
   
-  const { valueSort, changeSort, optionsSort } = props;
+  const { valueSort, changeSort, optionsSort, history } = props;
   
   return (
       <Segment>
@@ -36,6 +36,7 @@ const ViewHeader = (props) => {
                 />
                 <PostModal
                   method={'Add'}
+                  history={history}
                 />
               </Grid.Column>
             </Grid.Row>

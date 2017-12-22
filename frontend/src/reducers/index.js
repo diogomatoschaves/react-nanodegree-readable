@@ -13,7 +13,10 @@ import {
   GET_COMMENTS,
   GET_CATEGORIES,
   UPDATE_SORT,
-  DELETE_POST
+  DELETE_POST,
+  UPDATE_COMMENT,
+  DELETE_COMMENT,
+  ADD_COMMENT
 } from '../actions/actions.js';
 import { combineReducers } from 'redux'
 
@@ -79,15 +82,59 @@ function posts(state = [], action) {
   }
 }
 
-function comments(state = [], action) {
+function comments(state = {}, action) {
   
   switch (action.type) {
     case GET_COMMENTS:
       return {
         ...state,
-          [action.info.id]: action.items
+        [action.info.id]: action.items.reduce((comments, currValue) => {
+          comments[currValue.id] = currValue;
+          return comments
+        }, {})
       };
-    
+    case UPDATE_COMMENT:
+      let updatedComment = state[action.comment.parentId][action.comment.commentId];
+      Object.keys(action.comment).forEach(key => {
+        if (key !== 'parentId') {
+          updatedComment[key] = action.comment[key]
+        }
+      });
+      return {
+        ...state,
+        [action.comment.parentId]: {
+          ...state[action.comment.parentId],
+          [action.comment.commentId]: updatedComment
+        }
+      };
+    case DELETE_COMMENT:
+      return {
+        ...state,
+        [action.comment.parentId]: Object.keys(state[action.comment.parentId]).reduce((comments, currComment) => {
+          if (currComment !== action.comment.commentId) {
+            comments[currComment] = state[action.comment.parentId][currComment]
+          }
+          return comments;
+        }, {})
+      };
+    case ADD_COMMENT:
+      return {
+        ...state,
+        [action.comment.parentId]: {
+          ...state[action.comment.parentId],
+          [action.comment.id]: {
+            id: action.comment.id,
+            deleted: false,
+            parentDeleted: false,
+            timestamp: action.comment.timestamp,
+            author: action.comment.author,
+            body: action.comment.body,
+            voteScore: 0,
+            parentId: action.comment.parentId,
+            avatar: action.comment.avatar
+          }
+        }
+      };
     default:
       return state
   }
@@ -150,66 +197,4 @@ export default combineReducers({
   valueSort,
   optionsSort
 })
-
-/*const newComments = action.items.map((comment)=>{
-        comment['avatar'] = avatars[Math.floor(Math.random() * 4)];
-        return comment
-      });*/
-
-/*// } else {
-      //   newState.byId[action.post.id] = action.post;
-      //   return newState
-      //   return {
-      //
-      //   }
-      // }
-      //
-      // if (oldPost.length > 0) {
-      //   newState = prevState.allIds.forEach((postId) => {
-      //    if (postId === action.post.id) {
-      //      return action.post;
-      //    } else {
-      //      return post;
-      //    }})
-      // } else {
-      //   let newState = state;
-      //   newState.push(action.post);
-      //   return newState
-      // }*/
-
-/*/*case UPDATE_POST:
-
-      const oldPost = state.allIds.filter((postId) => postId === action.post.id);
-
-      if (oldPost.length > 0) {
-        return {
-          ...state,
-          byId: {
-            ...state.byId,
-            [action.post.id]: action.post
-          }
-        }
-      } else {
-        return {
-          ...state,
-          byId: {
-            ...state.byId,
-            [action.post.id]: action.post
-          },
-          allIds: [...state.allIds, action.post.id]
-        }
-      }*/
-
-/*const updatedPost = Object.keys(state.byId[action.post.postId]).reduce((post, key) => {
-        if (action.post[key]) {
-          post[key] = action.post[key];
-          return post
-        } else if (key === 'voteScore' && action.post.voteScore === 0) {
-
-        } else {
-          post[key] = state.byId[action.post.postId][key];
-          return post
-        }
-      }, {}); */
-
 

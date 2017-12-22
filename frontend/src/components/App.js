@@ -34,7 +34,7 @@ class App extends Component {
     return (
       <div className="App">
         <Switch>
-          <Route exact path="/" render={({ location }) => (
+          <Route exact path="/" render={({ location, history }) => (
             <Grid divided={true} stackable>
               <Grid.Row>
                 <Grid.Column width={16} verticalAlign={'middle'}>
@@ -54,7 +54,7 @@ class App extends Component {
                 </Grid.Column>
                 <Grid.Column  width={10}>
                   <div ref={this.handleContextRef}>
-                    <ViewHeader/>
+                    <ViewHeader history={history} />
                     <ListPosts
                       location={location}
                       category="allposts"
@@ -66,7 +66,7 @@ class App extends Component {
               </Grid.Row>
             </Grid>
             )}/>
-          <Route path="/:category" render={({ match, location }) => (
+          <Route path="/:category" render={({ match, location, history }) => (
             <Grid divided={true} stackable>
               <Grid.Row>
                 <Grid.Column width={16} verticalAlign={'middle'}>
@@ -86,7 +86,7 @@ class App extends Component {
                 </Grid.Column>
                 <Grid.Column  width={10}>
                   <div ref={this.handleContextRef}>
-                    <ViewHeader/>
+                    <ViewHeader history={history} />
                     {categories && categories.includes(match.params.category) ? (
                       <ListPosts
                         location={location}

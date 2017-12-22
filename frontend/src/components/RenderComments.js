@@ -15,15 +15,18 @@ const RenderComments = (props) => {
   const { getFormattedDate, deleteComment, post, commentVote } = props;
   let { comments } = props;
 
+  comments = Object.keys(comments).reduce((commentsArr, currValue) => {
+    commentsArr = commentsArr.concat(comments[currValue]);
+    return commentsArr
+  }, []);
+
   comments = comments.sort((a, b) => {
-      return b['voteScore'] - a['voteScore']
-    });
-  
-  comments.map(comment => console.log(comment.avatar));
-  
+      return b.voteScore - a.voteScore
+  });
+
   return (
     <div>
-      {comments instanceof Array && (
+      {comments && (
         comments.map((comment) => (
           <div key={comment.id}>
             <Grid columns={2}>
@@ -50,11 +53,11 @@ const RenderComments = (props) => {
                           <Comment.Actions>
                             <div style={{'display': 'inline', 'paddingRight': '8px'}}>{comment.voteScore} Votes </div>
                             <Comment.Action as='a' onClick={()=>
-                            commentVote({ commentId: comment.id, parentId: post.id, option: 'upVote' })}>
+                            commentVote({ commentId: comment.id, parentId: post.id, option: 'upVote', voteScore: comment.voteScore })}>
                               <Icon name="like outline"/>
                             </Comment.Action>
                             <Comment.Action onClick={()=>
-                            commentVote({ commentId: comment.id, parentId: post.id, option: 'downVote' })}>
+                            commentVote({ commentId: comment.id, parentId: post.id, option: 'downVote', voteScore: comment.voteScore })}>
                               <Icon name="dislike outline"/>
                             </Comment.Action>
                           </Comment.Actions>
@@ -94,7 +97,7 @@ const mapDispatchStateToProps = () => {
 const mapDispatchToProps = (dispatch) => {
     return {
       deleteComment: (commentId, parentId) => dispatch(deleteComment(commentId, parentId)),
-      commentVote: ({ commentId, parentId, option }) => dispatch(commentVote({ commentId, parentId, option }))
+      commentVote: ({ commentId, parentId, option, voteScore }) => dispatch(commentVote({ commentId, parentId, option, voteScore }))
     };
 };
 

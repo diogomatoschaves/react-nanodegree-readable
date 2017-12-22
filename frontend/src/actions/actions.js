@@ -9,6 +9,7 @@ export const DELETE_POST = 'DELETE_POST';
 export const UPDATE_POST = 'UPDATE_POST';
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const DELETE_COMMENT = 'DELETE_COMMENT';
+export const UPDATE_COMMENT = 'UPDATE_COMMENT';
 export const GET_POSTS = 'GET_POSTS';
 export const GET_COMMENTS = 'GET_COMMENTS';
 export const UPDATE_CATEGORY = 'UPDATE_CATEGORY';
@@ -219,17 +220,42 @@ export function getComments (items, info) {
   }
 }
 
+function updateComment (comment) {
+  return {
+    type: UPDATE_COMMENT,
+    comment
+  }
+}
+
+function deleteCommentStore (comment) {
+  return {
+    type: DELETE_COMMENT,
+    comment
+  }
+}
+
+function addCommentStore (comment) {
+  return {
+    type: ADD_COMMENT,
+    comment
+  }
+}
+
 // Asynchronous functions
+
+// Edit Comment
 
 export function editComment ({ commentId, parentId, body }) {
   return (dispatch) => {
-    
+
     let url = `http://localhost:3001/comments/${commentId}`;
     
     const payload = {
       timestamp: new Date().getTime(),
       body
     };
+
+    dispatch(updateComment({ ...payload, commentId, parentId }));
 
     fetch(url, {
       headers: {
@@ -241,16 +267,17 @@ export function editComment ({ commentId, parentId, body }) {
       body: JSON.stringify(payload)
       })
     .then((res) => {
-      dispatch(getItems(`http://localhost:3001/posts/${parentId}/comments`, 
-        {type: 'comments', id: parentId}));
-      dispatch(getPost(parentId))
     })
     .catch((res) => (console.log(res)));
   }
 }
 
+// Delete Comment
+
 export function deleteComment (commentId, parentId) {
   return (dispatch) => {
+    
+    dispatch(deleteCommentStore({ commentId, parentId }));
     
     const url = `http://localhost:3001/comments/${commentId}`;
     
@@ -263,9 +290,6 @@ export function deleteComment (commentId, parentId) {
       method: 'DELETE'
     })
     .then((res) => {
-      dispatch(getItems(`http://localhost:3001/posts/${parentId}/comments`, 
-        {type: 'comments', id: parentId}));
-      dispatch(getPost(parentId))
     })
     .catch((res) => (console.log(res)));
   }
@@ -286,6 +310,8 @@ export function addComment ({ username, body, parentId }) {
       parentId,
       avatar: `${avatars[Math.floor(Math.random() * 4)]}`
     };
+    
+    dispatch(addCommentStore(payload));
 
     fetch(url, {
       headers: {
@@ -297,16 +323,18 @@ export function addComment ({ username, body, parentId }) {
       body: JSON.stringify(payload)
       })
     .then((res) => {
-      dispatch(getItems(`http://localhost:3001/posts/${parentId}/comments`, 
-        {type: 'comments', id: parentId}));
-      dispatch(getPost(parentId))
     })
     .catch((res) => (console.log(res)));
   }
 }
 
-export function commentVote({ commentId, parentId, option }) {
+export function commentVote({ commentId, parentId, option, voteScore }) {
   return (dispatch) => {
+
+    let newVoteScore;
+    option === 'upVote' ? newVoteScore = voteScore + 1 : newVoteScore = voteScore - 1;
+
+    dispatch(updateComment({ voteScore: newVoteScore, commentId, parentId }));
 
     let url = `http://localhost:3001/comments/${commentId}`;
 
@@ -324,9 +352,6 @@ export function commentVote({ commentId, parentId, option }) {
       body: JSON.stringify(payload)
       })
     .then((res) => {
-      dispatch(getItems(`http://localhost:3001/posts/${parentId}/comments`, 
-        {type: 'comments', id: parentId}));
-      // dispatch(getPost(parentId))
     })
   }
 }
